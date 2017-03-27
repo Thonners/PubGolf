@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Pub Golf</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Launcher Page Card Texts -->
+    <string name="card_play_golf_title">Play Pub Golf\!</string>
+    <string name="card_play_golf_subtitle">Start a new round</string>
+    <string name="card_scorecard_library_title">Scorecard Library</string>
+    <string name="card_scorecard_library_subtitle">View historical scorecards</string>
+    <string name="card_download_courses_title">Manage Courses</string>
+    <string name="card_download_courses_subtitle">Download or create courses to play</string>
+    <string name="card_custom_rules_title">Manage Rule Sets</string>
+    <string name="card_custom_rules_subtitle">Edit or amend the default rules to suit your game</string>
+    <!-- Dialog Texts -->
+    <string name="dialog_new_round_title">New round</string>
+    <string name="dialog_new_round_message">Do you want to create a new game, or to join an existing game\?</string>
+    <string name="dialog_new_round_create">CREATE</string>
+    <string name="dialog_new_round_join">JOIN</string>
+
+
+    <!-- Auto-created strings -->
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>
