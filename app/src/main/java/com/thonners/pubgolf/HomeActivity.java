@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
@@ -194,9 +195,11 @@ public class HomeActivity extends AppCompatActivity
             case BUTTON_NEGATIVE:
                 // Join existing game
                 Log.d(LOG_TAG, "Join game selected.") ;
+                Toast.makeText(this,"Functionality not yet live. Please create a new game.",Toast.LENGTH_LONG).show();
                 break ;
             case BUTTON_POSITIVE:
                 Log.d(LOG_TAG, "Create new game selected.") ;
+
                 break ;
         }
     }

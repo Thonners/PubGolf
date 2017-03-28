@@ -20,6 +20,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- Swap this include to a FrameLayout to allow for use of fragments
     <include layout="@layout/content_home"/>
+    -->
+
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
 </android.support.design.widget.CoordinatorLayout>

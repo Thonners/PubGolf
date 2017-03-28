@@ -9,9 +9,14 @@
     <!-- Text Sizes -->
     <dimen name="launch_card_title">12sp</dimen>
     <dimen name="launch_card_subtitle">8sp</dimen>
+    <dimen name="scorecard_header_text_size">12sp</dimen>
 
     <!-- Images -->
     <dimen name="launch_card_icon">32dp</dimen>
+
+    <!-- Scorecard Dimensions -->
+    <dimen name="sc_row_height">36dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

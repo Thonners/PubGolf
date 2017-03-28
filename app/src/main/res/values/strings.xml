@@ -17,6 +17,15 @@
     <string name="dialog_new_round_create">CREATE</string>
     <string name="dialog_new_round_join">JOIN</string>
 
+    <!-- Scorecard Headers -->
+    <array name="scorecard_headers">
+        <item name="sc_header_number">Hole</item>
+        <item name="sc_header_name">Establishment</item>
+        <item name="sc_header_drink">Drink</item>
+        <item name="sc_header_par">Par</item>
+        <item name="sc_header_p1">Player 1</item> <!-- Remove this when adding players / names implemented -->
+    </array>
+
 
     <!-- Auto-created strings -->
     <string name="title_activity_home">HomeActivity</string>

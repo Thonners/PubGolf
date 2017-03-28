@@ -13,7 +13,7 @@ public class Drink {
     private Type drinkType ;
 
     public enum Type {
-        PINT, WINE, SHORT, LONG, SHOT
+        PINT, WINE, SHORT, LONG, SHOT, GUINNESS_AND_GNT
     }
     /**
      * Constructor
