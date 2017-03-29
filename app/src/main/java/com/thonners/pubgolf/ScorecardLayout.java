@@ -3,6 +3,7 @@ package com.thonners.pubgolf;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import java.util.ArrayList;
  */
 
 public class ScorecardLayout extends LinearLayout {
+
+    private final String LOG_TAG = "ScorecardLayout" ;
 
     // Initialise to default of 9
     int noHoles = 9;
@@ -53,6 +56,7 @@ public class ScorecardLayout extends LinearLayout {
      * Method to create the grid as required for the scorecard
      */
     private void initialise() {
+        Log.d(LOG_TAG, "ScorecardLayout.initialise() called...");
         // Force orientation to vertical
         this.setOrientation(VERTICAL);
         // Set the background so that there's an outline to the whole grid
@@ -142,6 +146,8 @@ public class ScorecardLayout extends LinearLayout {
                     }
                     // Set the text
                     tv.setText(text);
+                    // Add to the view
+                    this.addView(tv);
                 }
             }
         }
