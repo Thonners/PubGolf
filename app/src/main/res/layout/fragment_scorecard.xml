@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/sc_outer_padding"
     tools:context="com.thonners.pubgolf.ScorecardFragment">
 
     <ScrollView
@@ -9,8 +10,10 @@
         android:layout_height="match_parent">
 
         <com.thonners.pubgolf.ScorecardLayout
+            android:id="@+id/scorecard_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:padding="1dp"/> <!-- 1dp padding required to get double borders around all views to keep the line thicknesses the same @ 2dp -->
 
     </ScrollView>
 </FrameLayout>

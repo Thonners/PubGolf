@@ -4,9 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 
 /**
@@ -15,7 +19,11 @@ import android.view.ViewGroup;
  * @author M Thomas
  * @since 28/03/17
  */
-public class ScorecardFragment extends Fragment {
+public class ScorecardFragment extends Fragment implements ScorecardLayout.OnScorecardLayoutInteractionListener{
+
+    private final String LOG_TAG = "ScorecardFragment" ;
+    private Course course = new Course() ;
+    private ScorecardLayout scorecardLayout ;
 
     private OnScorecardFragmentInteractionListener mListener;
 
@@ -32,9 +40,9 @@ public class ScorecardFragment extends Fragment {
      * @return A new instance of fragment ScorecardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScorecardFragment newInstance(String param1, String param2) {
+    public static ScorecardFragment newInstance(Course course) {
         ScorecardFragment fragment = new ScorecardFragment();
-        /*Bundle args = new Bundle();
+       /* Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);*/
@@ -54,7 +62,11 @@ public class ScorecardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scorecard, container, false);
+        View view = inflater.inflate(R.layout.fragment_scorecard, container, false);
+        scorecardLayout = (ScorecardLayout) view.findViewById(R.id.scorecard_layout);
+        mListener.getCourse() ;
+        scorecardLayout.setOnScorecardLayoutInteractionListener(this);
+        return view ;
     }
 
 
@@ -86,6 +98,13 @@ public class ScorecardFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnScorecardFragmentInteractionListener {
-        void scorecardFragmentInteraction();
+        Course getCourse();
+    }
+
+    public void populateScorecard() {
+        Log.d(LOG_TAG, "populateScorecard called");
+        for (Hole hole : course.getCourse()) {
+            scorecardLayout.addHole(hole);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.thonners.pubgolf;
 
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng ;
 
 /**
@@ -11,14 +13,21 @@ import com.google.android.gms.maps.model.LatLng ;
 public class Hole {
 
     private int holeNo ;
+    private Pub pub ;
     private Drink drink ;
     private int shots ;
 
     /**
      * Constructor
      */
-    public Hole(int number, Drink drink) {
+    public Hole(Pub pub, int number, Drink drink) {
+        this.pub = pub ;
+        this.holeNo = number ;
+        this.drink = drink ;
+    }
 
+    public String getPubName() {
+        return pub.getName() ;
     }
 
     /**
@@ -82,7 +91,9 @@ public class Hole {
          * Constructor
          */
         public Pub() {
-
+            // TODO: Real pub admin
+            // Set a dummy name for now
+            name = "The Barley Mow" ;
         }
 
         /**
@@ -110,6 +121,8 @@ public class Hole {
             this.name = name;
         }
     }
+
+
 
 
 }

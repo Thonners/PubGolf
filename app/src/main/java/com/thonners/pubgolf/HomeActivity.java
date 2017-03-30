@@ -14,11 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener{
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
+
+    private Course courseToLoad ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,11 +127,13 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void launchNewGame() {
+        // TODO: Get the course
+        courseToLoad = new Course() ;
         swapFragment(ScorecardFragment.class);
     }
 
     @Override
-    public void scorecardFragmentInteraction() {
-
+    public Course getCourse() {
+        return courseToLoad ;
     }
 }
