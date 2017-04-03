@@ -16,15 +16,11 @@ public class Course  {
 
     private final int defaultCourseLength = 9 ;
 
+    private String name ;
     private ArrayList<Hole> course = new ArrayList<>();
 
-    public Course() {
-
-        // Create empty course for now
-        for (int i = 1 ; i <= defaultCourseLength ; i++) {
-            addHole(new Hole(new Hole.Pub(), i,new Drink("Ale", Drink.Type.PINT,4)));
-        }
-
+    public Course(String name) {
+        this.name = name ;
     }
 
     /**
@@ -52,6 +48,12 @@ public class Course  {
         return course ;
     }
 
+    /**
+     * @return The name of the course
+     */
+    public String getName() {
+        return name;
+    }
 
     /*
      * DELETE THE BELOW IF PARCELABLE NOT USED

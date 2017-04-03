@@ -3,8 +3,12 @@ package com.thonners.pubgolf;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -23,6 +27,9 @@ import java.util.ArrayList;
 public class ScorecardLayout extends LinearLayout {
 
     private final String LOG_TAG = "ScorecardLayout" ;
+
+    private final int PUB_COLUMN = 1 ;
+    private final int DRINK_COLUMN = 2 ;
 
     // Initialise to default of 9
     private int noHoles = 9;
@@ -74,6 +81,9 @@ public class ScorecardLayout extends LinearLayout {
         this.setBackground(getResources().getDrawable(R.drawable.cell_outlined));
         // Create the first row
         createHeaderRow();
+
+        // Debugging - print the
+        Log.d(LOG_TAG,"Context is of class: " + getContext().getClass() + " whilst passed context is of type: " + context.getClass()) ;
     }
 
     public void setOnScorecardLayoutInteractionListener(OnScorecardLayoutInteractionListener listener) {
@@ -199,9 +209,11 @@ public class ScorecardLayout extends LinearLayout {
                             view = createTextView(text, col) ;
                             break;
                         case 1:
-                            text = hole.getPubName() ;
+                            //text = hole.getPubName() ;
                             // Create TextView instance
-                            view = createTextView(text, col) ;
+                            //view = createTextView(text, col) ;
+                            view = createPubTextView(hole.getPub()) ;
+                            view.setOnClickListener((HomeActivity) context);
                             break;
                         case 2:
                             text = hole.getDrink().getName() ;
@@ -232,7 +244,13 @@ public class ScorecardLayout extends LinearLayout {
          */
         private TextView createTextView(String text, int column) {
             // Create TextView instance
-            TextView tv = new TextView(context) ;
+            TextView tv = new TextView(context);
+            // Populate it
+            populateTextView(tv, text, column);
+
+            return tv ;
+        }
+        private void populateTextView(TextView tv, String text, int column) {
             // Set the view ID
             tv.setId(column);
             // Set the style
@@ -245,17 +263,22 @@ public class ScorecardLayout extends LinearLayout {
             tv.setText(text);
             // Set the text appearance
             tv.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+            tv.setGravity(Gravity.CENTER);
             if (hole == null) tv.setTypeface(Typeface.DEFAULT_BOLD);
             // Set the padding
             int padding = context.getResources().getDimensionPixelOffset(R.dimen.sc_text_padding) ;
             tv.setPadding(padding, padding, padding, padding);
             // Set the background
-            tv.setBackground(getResources().getDrawable(R.drawable.cell_outlined));
+            tv.setBackground(ContextCompat.getDrawable(context, R.drawable.cell_outlined));
+        }
 
+        private PubTextView createPubTextView(Hole.Pub pub) {
+            // Create the instance
+            PubTextView ptv = new PubTextView(context, pub) ;
+            // Populate it
+            populateTextView(ptv, pub.getName(), PUB_COLUMN);
 
-            Log.d(LOG_TAG, "Creating text view to show: " + text) ;
-            // Return the TextView
-            return tv ;
+            return ptv ;
         }
 
         /**
@@ -284,8 +307,13 @@ public class ScorecardLayout extends LinearLayout {
             et.setPadding(padding, padding, padding, padding);
             // Set the background
             et.setBackground(getResources().getDrawable(R.drawable.cell_outlined));
+            // Force to numbers
+            et.setInputType(InputType.TYPE_CLASS_NUMBER);
+            // Force max number of digits to 2
+            et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
 
-            Log.d(LOG_TAG, "Creating edittext with ID: " + viewID) ;
+            // Set the onClickListener
+
             // Return the EditText
             return et ;
         }
@@ -299,7 +327,7 @@ public class ScorecardLayout extends LinearLayout {
         private LayoutParams getLayoutParamsPG(int row, int col) {
             LayoutParams lp ;
             if (row == 0) {
-                if (col == 1 || col == 2) {
+                if (col == PUB_COLUMN || col == DRINK_COLUMN) {
                     lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
                     lp.weight = 1.0f;
                 } else {
@@ -307,7 +335,6 @@ public class ScorecardLayout extends LinearLayout {
                 }
             } else {
                 int width = rows.get(0).getView(col).getWidth();
-                Log.d(LOG_TAG, "Width of the view = " + width) ;
                 lp = new LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT) ;
             }
             return lp ;

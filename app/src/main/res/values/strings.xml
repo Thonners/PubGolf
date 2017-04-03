@@ -16,6 +16,7 @@
     <string name="dialog_new_round_message">Do you want to create a new game, or to join an existing game\?</string>
     <string name="dialog_new_round_create">CREATE</string>
     <string name="dialog_new_round_join">JOIN</string>
+    <string name="dialog_select_course_title">Select the course</string>
 
     <!-- Scorecard Headers -->
     <array name="scorecard_headers">

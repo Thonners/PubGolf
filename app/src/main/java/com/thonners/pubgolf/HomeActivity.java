@@ -12,17 +12,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener, PubTextView.OnClickListener{
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
 
     private Course courseToLoad ;
+    private CourseManager cm = new CourseManager() ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,9 +129,10 @@ public class HomeActivity extends AppCompatActivity
      * Interface method to be called from the LaunchActivityFragment to create a new scorecard
      */
     @Override
-    public void launchNewGame() {
+    public void launchNewGame(Course courseToLoad) {
         // TODO: Get the course
-        courseToLoad = new Course() ;
+        this.courseToLoad = courseToLoad ;
+        getSupportActionBar().setTitle(courseToLoad.getName());
         swapFragment(ScorecardFragment.class);
     }
 
@@ -136,4 +140,43 @@ public class HomeActivity extends AppCompatActivity
     public Course getCourse() {
         return courseToLoad ;
     }
+
+    /**
+     * Method to switch to the Map fragment and show the pub
+     * @param pub The pub to be displayed on the map
+     */
+    @Override
+    public void goToPub(Hole.Pub pub){
+        // TODO: Implement switching to map fragment
+        Toast.makeText(this, "Would show pub: " + pub.getName() + " on map.", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @return An ArrayList of the available courses
+     */
+    @Override
+    public ArrayList<Course> getCourses() {
+        return cm.getCourses() ;
+    }
+
+    /**
+     * Method to launch the course manager
+     */
+    @Override
+    public void getMoreCourses() {
+        //TODO: Implement this method
+        Log.d(LOG_TAG, "Would switch to the CourseManager fragment now...") ;
+    }
+
+    @Override
+    public void onClick(View view) {
+        // Pub clicks
+        if (view instanceof PubTextView) {
+            Log.d(LOG_TAG, "PubTextView was just clicked") ;
+            goToPub(((PubTextView) view).getPub());
+        } else {
+            Log.d(LOG_TAG, "Unrecognised view was just clicked") ;
+        }
+    }
+
 }

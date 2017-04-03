@@ -79,6 +79,10 @@ public class Hole {
         this.shots = shots;
     }
 
+    public Pub getPub() {
+        return pub;
+    }
+
     /**
      * Class to hold the details of the hole's pub/bar
      */
@@ -90,10 +94,10 @@ public class Hole {
         /**
          * Constructor
          */
-        public Pub() {
+        public Pub(String name) {
             // TODO: Real pub admin
             // Set a dummy name for now
-            name = "The Barley Mow" ;
+            this.name = name ; //"The Barley Mow" ;
         }
 
         /**

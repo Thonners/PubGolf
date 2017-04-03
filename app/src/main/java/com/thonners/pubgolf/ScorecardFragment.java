@@ -22,21 +22,19 @@ import java.util.ArrayList;
 public class ScorecardFragment extends Fragment implements ScorecardLayout.OnScorecardLayoutInteractionListener{
 
     private final String LOG_TAG = "ScorecardFragment" ;
-    private Course course = new Course() ;
+    private Course course ;
     private ScorecardLayout scorecardLayout ;
 
     private OnScorecardFragmentInteractionListener mListener;
 
     public ScorecardFragment() {
-        // Required empty public constructor
+        // Required empty public constructor - called if the fragment is destroyed by the Android framework
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ScorecardFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -64,7 +62,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scorecard, container, false);
         scorecardLayout = (ScorecardLayout) view.findViewById(R.id.scorecard_layout);
-        mListener.getCourse() ;
+        course = mListener.getCourse() ;
         scorecardLayout.setOnScorecardLayoutInteractionListener(this);
         return view ;
     }
@@ -99,12 +97,22 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
      */
     public interface OnScorecardFragmentInteractionListener {
         Course getCourse();
+        void goToPub(Hole.Pub pub) ;
     }
 
+    /**
+     * Method to trigger adding the views to the scorecard.
+     *
+     * Requires separate call so that the subsequent population of the scorecard can happen after
+     * the header row has been drawn, and therefore the calls of getWidth() return correctly.
+     */
+    @Override
     public void populateScorecard() {
         Log.d(LOG_TAG, "populateScorecard called");
         for (Hole hole : course.getCourse()) {
             scorecardLayout.addHole(hole);
         }
     }
+
+
 }
