@@ -18,13 +18,18 @@
     <string name="dialog_new_round_join">JOIN</string>
     <string name="dialog_select_course_title">Select the course</string>
 
+    <!-- Footer buttons -->
+    <string name="footer_button_scorecard">Scorecard</string>
+    <string name="footer_button_map">Map</string>
+
     <!-- Scorecard Headers -->
     <array name="scorecard_headers">
         <item name="sc_header_number">Hole</item>
         <item name="sc_header_name">Establishment</item>
         <item name="sc_header_drink">Drink</item>
         <item name="sc_header_par">Par</item>
-        <item name="sc_header_p1">Player 1</item> <!-- Remove this when adding players / names implemented -->
+        <item name="sc_header_p1">Player 1
+        </item> <!-- Remove this when adding players / names implemented -->
     </array>
 
 

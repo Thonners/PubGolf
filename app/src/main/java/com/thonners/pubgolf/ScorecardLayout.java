@@ -262,8 +262,8 @@ public class ScorecardLayout extends LinearLayout {
             // Set the text
             tv.setText(text);
             // Set the text appearance
-            tv.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-            tv.setGravity(Gravity.CENTER);
+      //      tv.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+      //      tv.setGravity(Gravity.CENTER);
             if (hole == null) tv.setTypeface(Typeface.DEFAULT_BOLD);
             // Set the padding
             int padding = context.getResources().getDimensionPixelOffset(R.dimen.sc_text_padding) ;

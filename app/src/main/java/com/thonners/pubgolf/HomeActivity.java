@@ -133,7 +133,8 @@ public class HomeActivity extends AppCompatActivity
         // TODO: Get the course
         this.courseToLoad = courseToLoad ;
         getSupportActionBar().setTitle(courseToLoad.getName());
-        swapFragment(ScorecardFragment.class);
+        //swapFragment(ScorecardFragment.class);
+        swapFragment(GolfRoundActivityFragment.class);
     }
 
     @Override
