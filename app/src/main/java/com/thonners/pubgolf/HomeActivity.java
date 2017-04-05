@@ -20,12 +20,14 @@ import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener, PubTextView.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener, PubTextView.OnClickListener, GolfCourseMapFragment.OnGCMapFragmentInteraction{
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
 
     private Course courseToLoad ;
     private CourseManager cm = new CourseManager() ;
+
+    private GolfCourseMapFragment gcmf = null ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,8 +150,17 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void goToPub(Hole.Pub pub){
-        // TODO: Implement switching to map fragment
-        Toast.makeText(this, "Would show pub: " + pub.getName() + " on map.", Toast.LENGTH_SHORT).show();
+        if (gcmf != null) {
+            gcmf.goToPub(pub);
+        } else {
+            Log.d(LOG_TAG,"gcmf is null, so can't show pub on map!") ;
+            Toast.makeText(this, "Would show pub: " + pub.getName() + " on map, but something's gone wrong.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) {
+        gcmf = gcMapFragment ;
     }
 
     /**

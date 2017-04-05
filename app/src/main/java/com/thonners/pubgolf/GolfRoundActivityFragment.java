@@ -26,6 +26,7 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
 
     private Footer footer ;
     private ViewPager viewPager ;
+    private GolfRoundViewPagerAdapter pagerAdapter ;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -81,6 +82,11 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
         footer = (Footer) view.findViewById(R.id.footer) ;
         footer.setFooterInteractionListener(this);
 
+        // Create the pager adapter and set the viewPager to use it
+        pagerAdapter = new GolfRoundViewPagerAdapter(getFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        // Prevent the viewPager destroying fragments/views when they're offscreen
+        viewPager.setOffscreenPageLimit(pagerAdapter.getCount());
         // Create the footer buttons
         createFooterButtons() ;
 
@@ -115,21 +121,6 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
         //mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
- /*   public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-*/
     @Override
     public void footerButtonClicked(int buttonID) {
         switch (buttonID) {
@@ -137,9 +128,11 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
                 // Catch anything else at this stage and let it fall through to scorecard
             case SCORECARD_FOOTER_BUTTON_ID:
                 Log.d(LOG_TAG,"Scorecard footer button clicked") ;
+                viewPager.setCurrentItem(SCORECARD_FOOTER_BUTTON_ID);
                 break;
             case MAP_FOOTER_BUTTON_ID:
                 Log.d(LOG_TAG,"Map footer button clicked") ;
+                viewPager.setCurrentItem(MAP_FOOTER_BUTTON_ID);
                 break;
         }
     }

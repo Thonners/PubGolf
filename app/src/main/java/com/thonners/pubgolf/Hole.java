@@ -88,7 +88,7 @@ public class Hole {
      */
     public static class Pub {
 
-        private LatLng location ;
+        private LatLng location = new LatLng(51.453486, -0.221979) ; // Location of the Green Man in Putney for testing
         private String name ;
 
         /**
