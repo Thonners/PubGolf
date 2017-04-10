@@ -98,11 +98,16 @@ public class Footer extends LinearLayout implements LinearLayout.OnClickListener
      */
     @Override
     public void onClick(View view) {
-        // Safe to case to FooterButton, since that is the only type of view to which this onClickListener is watching. Checking the classtype seems wasteful & unnecessary.
+        // Safe to cast to FooterButton, since that is the only type of view to which this onClickListener is watching. Checking the classtype seems wasteful & unnecessary.
         FooterButton button = (FooterButton) view ;
         // Get button ID
-        int buttonID = button.getIdentifier() ;
+        setButtonFocused(button.getIdentifier()) ;
+    }
 
+    /**
+     * @param buttonID The identifier of the footer button to be focused
+     */
+    public void setButtonFocused(int buttonID) {
         // If button already active, ignore click
         if (buttonID == activeButtonID) {
             Log.d(LOG_TAG,"Same button clicked, so doing nothing. Button ID = " + buttonID) ;

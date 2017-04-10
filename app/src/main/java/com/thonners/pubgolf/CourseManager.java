@@ -1,5 +1,7 @@
 package com.thonners.pubgolf;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -27,29 +29,29 @@ public class CourseManager {
      */
     private void createDefaultCourse() {
         Course mbLinks = new Course("Marylebone Links");
-        mbLinks.addHole(new Hole(new Hole.Pub("The Barley Mow"), 1, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks.addHole(new Hole(new Hole.Pub("Henry Holland"), 2, new Drink("Lager", Drink.Type.PINT,4)));
-        mbLinks.addHole(new Hole(new Hole.Pub("Devonshire Arms"), 3, new Drink("Bitter", Drink.Type.PINT,3)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The Coach Makers"), 4, new Drink("Cider", Drink.Type.PINT,5)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The Golden Eagle"), 5, new Drink("Mulled wine", Drink.Type.WINE,3)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The Angel in the Fields"), 6, new Drink("Guinness + G&T", Drink.Type.GUINNESS_AND_GNT,2)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The Gunmakers"), 7, new Drink("Alcopop", Drink.Type.BOTTLE,1)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The Marylebone"), 8, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks.addHole(new Hole(new Hole.Pub("The King's Head"), 9, new Drink("IPA", Drink.Type.PINT,3)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Barley Mow", new LatLng(51.512913,-0.150978)), 1, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks.addHole(new Hole(new Hole.Pub("Henry Holland", new LatLng(51.514689, -0.151431)), 2, new Drink("Lager", Drink.Type.PINT,4)));
+        mbLinks.addHole(new Hole(new Hole.Pub("Devonshire Arms", new LatLng(51.51602, -0.152169)), 3, new Drink("Bitter", Drink.Type.PINT,3)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Coach Makers", new LatLng(51.51717, -0.150576)), 4, new Drink("Cider", Drink.Type.PINT,5)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Golden Eagle", new LatLng(51.517681,-0.150804)), 5, new Drink("Mulled wine", Drink.Type.WINE,3)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Angel in the Fields", new LatLng(51.518093,-0.151408)), 6, new Drink("Guinness + G&T", Drink.Type.GUINNESS_AND_GNT,2)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Gunmakers", new LatLng(51.51923,-0.153173)), 7, new Drink("Alcopop", Drink.Type.BOTTLE,1)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The Marylebone", new LatLng(51.519906,-0.15205)), 8, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks.addHole(new Hole(new Hole.Pub("The King's Head", new LatLng(51.519653,-0.150181)), 9, new Drink("IPA", Drink.Type.PINT,3)));
 
         // Add it to the list
         addCourse(mbLinks);
 
         Course mbLinks2 = new Course("Marylebone Links Back 9");
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Barley Mow"), 1, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Henry Holland"), 2, new Drink("Lager", Drink.Type.PINT,4)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Devonshire Arms"), 3, new Drink("Bitter", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Coach Makers"), 4, new Drink("Cider", Drink.Type.PINT,5)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Golden Eagle"), 5, new Drink("Mulled wine", Drink.Type.WINE,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Angel in the Fields"), 6, new Drink("Guinness + G&T", Drink.Type.GUINNESS_AND_GNT,2)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Gunmakers"), 7, new Drink("Alcopop", Drink.Type.BOTTLE,1)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The Marylebone"), 8, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("The King's Head"), 9, new Drink("IPA", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 1, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 2, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 3, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 4, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 5, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 6, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 7, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 8, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 9, new Drink("Ale", Drink.Type.PINT,3)));
 
         // Add it to the list
         addCourse(mbLinks2);

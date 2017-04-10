@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class HomeActivity extends AppCompatActivity
     private Course courseToLoad ;
     private CourseManager cm = new CourseManager() ;
 
+    private GolfRoundActivityFragment graf = null;
     private GolfCourseMapFragment gcmf = null ;
 
     @Override
@@ -117,6 +117,12 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+        if (fragment instanceof GolfRoundActivityFragment) {
+            graf = (GolfRoundActivityFragment) fragment ;
+        } else {
+            graf = null ;
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager() ;
         fragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).commit();
 
@@ -150,10 +156,11 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void goToPub(Hole.Pub pub){
-        if (gcmf != null) {
+        if (graf != null && gcmf != null) {
+            graf.showMap();
             gcmf.goToPub(pub);
         } else {
-            Log.d(LOG_TAG,"gcmf is null, so can't show pub on map!") ;
+            Log.d(LOG_TAG,"graf is null, so can't show pub on map!") ;
             Toast.makeText(this, "Would show pub: " + pub.getName() + " on map, but something's gone wrong.", Toast.LENGTH_SHORT).show();
         }
     }

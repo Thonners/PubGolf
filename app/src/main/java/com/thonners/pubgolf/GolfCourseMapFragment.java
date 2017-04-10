@@ -1,6 +1,8 @@
 package com.thonners.pubgolf;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -132,10 +134,9 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
      */
     private void addCourseMarkers() {
         course = mListener.getCourse() ;
-        addHoleMarker(course.getHole(1));
-     /*   for (Hole hole : course.getHoles()) {
+        for (Hole hole : course.getHoles()) {
             addHoleMarker(hole);
-        }*/
+        }
     }
 
     /**
@@ -151,6 +152,9 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
         Marker holeMarker = map.addMarker(mops) ;
     }
 
+    /**
+     * @param pub The pub to which the map should now focus
+     */
     public void goToPub(Hole.Pub pub) {
         if (map != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(pub.getLocation(), 17f));

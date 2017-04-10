@@ -88,16 +88,15 @@ public class Hole {
      */
     public static class Pub {
 
-        private LatLng location = new LatLng(51.453486, -0.221979) ; // Location of the Green Man in Putney for testing
+        private LatLng location ;
         private String name ;
 
         /**
          * Constructor
          */
-        public Pub(String name) {
-            // TODO: Real pub admin
-            // Set a dummy name for now
-            this.name = name ; //"The Barley Mow" ;
+        public Pub(String name, LatLng location) {
+            this.name = name ;
+            this.location = location ;
         }
 
         /**

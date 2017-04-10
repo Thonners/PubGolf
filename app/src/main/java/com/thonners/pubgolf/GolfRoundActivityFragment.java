@@ -136,4 +136,9 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
                 break;
         }
     }
+
+    public void showMap() {
+        footer.setButtonFocused(MAP_FOOTER_BUTTON_ID);
+        footerButtonClicked(MAP_FOOTER_BUTTON_ID);
+    }
 }

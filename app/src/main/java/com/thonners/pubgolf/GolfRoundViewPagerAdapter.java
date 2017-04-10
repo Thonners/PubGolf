@@ -13,7 +13,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
 
-    private static int NUM_ITEMS = 2;
+    private final static int NUM_ITEMS = 2;
+    public final static int SCORECARD_FRAGMENT = 0;
+    public final static int MAP_FRAGMENT = 1;
 
     /**
      * Constructor
@@ -41,9 +43,9 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
+            case SCORECARD_FRAGMENT:
                 return ScorecardFragment.newInstance();
-            case 1:
+            case MAP_FRAGMENT:
                 return GolfCourseMapFragment.newInstance();
             default:
                 return null;
