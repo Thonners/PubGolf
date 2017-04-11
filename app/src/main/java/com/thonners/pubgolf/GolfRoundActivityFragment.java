@@ -87,6 +87,8 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
         viewPager.setAdapter(pagerAdapter);
         // Prevent the viewPager destroying fragments/views when they're offscreen
         viewPager.setOffscreenPageLimit(pagerAdapter.getCount());
+        // Add the footer button as an onPageChange listener
+        viewPager.addOnPageChangeListener(footer);
         // Create the footer buttons
         createFooterButtons() ;
 
@@ -132,13 +134,15 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
                 break;
             case MAP_FOOTER_BUTTON_ID:
                 Log.d(LOG_TAG,"Map footer button clicked") ;
-                viewPager.setCurrentItem(MAP_FOOTER_BUTTON_ID);
+                showMap() ;
                 break;
         }
     }
 
+    /**
+     * Method to change view pager to display the Map fragment
+     */
     public void showMap() {
-        footer.setButtonFocused(MAP_FOOTER_BUTTON_ID);
-        footerButtonClicked(MAP_FOOTER_BUTTON_ID);
+        viewPager.setCurrentItem(MAP_FOOTER_BUTTON_ID);
     }
 }

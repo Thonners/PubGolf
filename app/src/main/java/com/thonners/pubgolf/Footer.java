@@ -3,6 +3,7 @@ package com.thonners.pubgolf;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.Space;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  * @since 04/04/17
  */
 
-public class Footer extends LinearLayout implements LinearLayout.OnClickListener {
+public class Footer extends LinearLayout implements LinearLayout.OnClickListener, ViewPager.OnPageChangeListener {
 
     private final String LOG_TAG = "Footer" ;
 
@@ -93,18 +94,6 @@ public class Footer extends LinearLayout implements LinearLayout.OnClickListener
     }
 
     /**
-     * OnClickListener to manage clicks of FooterButtons
-     * @param view The FooterButton which was clicked
-     */
-    @Override
-    public void onClick(View view) {
-        // Safe to cast to FooterButton, since that is the only type of view to which this onClickListener is watching. Checking the classtype seems wasteful & unnecessary.
-        FooterButton button = (FooterButton) view ;
-        // Get button ID
-        setButtonFocused(button.getIdentifier()) ;
-    }
-
-    /**
      * @param buttonID The identifier of the footer button to be focused
      */
     public void setButtonFocused(int buttonID) {
@@ -119,9 +108,50 @@ public class Footer extends LinearLayout implements LinearLayout.OnClickListener
             buttons.get(buttonID).setIsFocused(true);
             // Update the activeButtonID
             activeButtonID = buttonID ;
-            // Call the footerInteractionListener
-            mListener.footerButtonClicked(buttonID);
         }
+    }
+
+    /**
+     * OnClickListener to manage clicks of FooterButtons
+     * @param view The FooterButton which was clicked
+     */
+    @Override
+    public void onClick(View view) {
+        // Safe to cast to FooterButton, since that is the only type of view to which this onClickListener is watching. Checking the classtype seems wasteful & unnecessary.
+        FooterButton button = (FooterButton) view ;
+        // Call the footerInteractionListener
+        mListener.footerButtonClicked(button.getIdentifier());
+    }
+
+    /**
+     * Method from {@link android.support.v4.view.ViewPager.OnPageChangeListener} to respond to a different
+     * page being selected. This simply calls {@link #setButtonFocused(int)} to apply focus to the
+     * appropriate footer button.
+     * @param position The index of the selected page
+     */
+    @Override
+    public void onPageSelected(int position) {
+        setButtonFocused(position);
+    }
+
+    /**
+     * Method from {@link android.support.v4.view.ViewPager.OnPageChangeListener}
+     * @param position The index of the page being scrolled
+     */
+    @Override
+    public void onPageScrollStateChanged(int position) {
+
+    }
+
+    /**
+     * Method from {@link android.support.v4.view.ViewPager.OnPageChangeListener}      *
+     * @param position The index of the page being scrolled
+     * @param positionOffset The amount it's been scrolled (?)
+     * @param positionOffsetPixels The amount it's been scrolled (?)
+     */
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
     }
 
     /**
