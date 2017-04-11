@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -90,6 +91,12 @@ public class ScorecardLayout extends LinearLayout {
         this.mListener = listener ;
     }
 
+    /**
+     * Creates the header row for the scorecard. When the scorecard row is created and has been drawn
+     * this method calls populateScorecard on the listener, which then creates the rest of the scorecard's views.
+     * This delay is required so that the calls to 'getWidth()' on the header row's views return correctly.
+     * If there is no delay, the width is reported as '0', as the call happens before the drawing has finished.
+     */
     private void createHeaderRow() {
         ScorecardRow newRow = new ScorecardRow(context, 0) ;
         rows.add(newRow) ;
@@ -102,12 +109,27 @@ public class ScorecardLayout extends LinearLayout {
         }) ;
     }
 
+    /**
+     * Method creates a new {@link ScorecardRow} instance, and animates its addition to the main {@link ScorecardLayout}
+     * @param hole The hole for which the scorecard row is to be created
+     */
     private void createRow(Hole hole) {
         ScorecardRow newRow = new ScorecardRow(context, hole) ;
+        newRow.setAlpha(0.0f);
+        newRow.setTranslationY((getResources().getDimension(R.dimen.sc_row_height)));
         rows.add(newRow) ;
         this.addView(rows.get(hole.getHoleNo()));
+        newRow.animate()
+                .alpha(1.0f)
+                .translationY(0)
+                .setDuration(300)
+                .setStartDelay(100*hole.getHoleNo())
+                .start();
     }
 
+    /**
+     * @param hole The hole to be added to the scorecard
+     */
     public void addHole(Hole hole) {
         Log.d(LOG_TAG, "Creating row for hole: " + hole.getHoleNo() + ": " + hole.getPubName()) ;
         createRow(hole);
