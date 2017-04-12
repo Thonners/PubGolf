@@ -1,5 +1,6 @@
 package com.thonners.pubgolf;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -99,14 +101,40 @@ public class ScorecardLayout extends LinearLayout {
      */
     private void createHeaderRow() {
         ScorecardRow newRow = new ScorecardRow(context, 0) ;
+        newRow.setAlpha(0.0f);
         rows.add(newRow) ;
         this.addView(rows.get(0));
-        newRow.post(new Runnable() {
+   /*     newRow.post(new Runnable() {
             @Override
             public void run() {
                 mListener.populateScorecard() ;
             }
-        }) ;
+        }) ; */
+        newRow.animate()
+                .alpha(1.0f)
+                .setDuration(300)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mListener.populateScorecard() ;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
     }
 
     /**
@@ -124,6 +152,7 @@ public class ScorecardLayout extends LinearLayout {
                 .translationY(0)
                 .setDuration(300)
                 .setStartDelay(100*hole.getHoleNo())
+                .setInterpolator(new DecelerateInterpolator())
                 .start();
     }
 
@@ -284,8 +313,7 @@ public class ScorecardLayout extends LinearLayout {
             // Set the text
             tv.setText(text);
             // Set the text appearance
-      //      tv.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-      //      tv.setGravity(Gravity.CENTER);
+            tv.setGravity(Gravity.CENTER);
             if (hole == null) tv.setTypeface(Typeface.DEFAULT_BOLD);
             // Set the padding
             int padding = context.getResources().getDimensionPixelOffset(R.dimen.sc_text_padding) ;

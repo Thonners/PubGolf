@@ -107,7 +107,9 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 .setPositiveButton(R.string.dialog_new_round_create, this)
                 .setNegativeButton(R.string.dialog_new_round_join, this);
         // Create & show the dialog
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_fade_in_slide_out;
+        dialog.show() ;
     }
 
     /**
@@ -130,7 +132,9 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 .setItems(courses, this)
                 .setNeutralButton("GET MORE COURSES", this);
         // Create & show the dialog
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_slide_in_fade_out;
+        dialog.show() ;
     }
     /**
      * Method to populate the views and apply the onClickListener to the given CardView

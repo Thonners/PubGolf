@@ -49,4 +49,15 @@
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
     </style>
+
+
+    <!-- Animations -->
+    <style name="dialog_animation_fade_in_slide_out">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_left_exit</item>
+    </style>
+    <style name="dialog_animation_slide_in_fade_out">
+        <item name="android:windowEnterAnimation">@anim/slide_left_entry</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
 </resources>
