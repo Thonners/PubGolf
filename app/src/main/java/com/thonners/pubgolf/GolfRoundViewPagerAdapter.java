@@ -3,6 +3,10 @@ package com.thonners.pubgolf;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * FragmentPagerAdapter to provide the fragments for the ViewPager in the {@link GolfRoundActivityFragment}
@@ -17,13 +21,21 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
     public final static int SCORECARD_FRAGMENT = 0;
     public final static int MAP_FRAGMENT = 1;
 
+    private ScorecardFragment scorecardFragment ;
+    private GolfCourseMapFragment mapFragment ;
+
+    private HashMap<Integer, Fragment> pageReferenceMap = new HashMap<>() ;
+
+    private Course course ;
+
     /**
      * Constructor
      *
      * @param fragmentManager
      */
-    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager) {
+    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager, Course course) {
         super(fragmentManager);
+        this.course = course ;
     }
 
     /**
@@ -42,14 +54,25 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
+        Fragment fragment ;
         switch (position) {
             case SCORECARD_FRAGMENT:
-                return ScorecardFragment.newInstance();
+                fragment = ScorecardFragment.newInstance(course);
+                break;
             case MAP_FRAGMENT:
-                return GolfCourseMapFragment.newInstance();
+                fragment = GolfCourseMapFragment.newInstance(course);
+                break;
             default:
                 return null;
         }
+        pageReferenceMap.put(position,fragment);
+        return fragment ;
+    }
+
+    @Override
+    public void destroyItem(View container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        pageReferenceMap.remove(position) ;
     }
 
     /**
@@ -69,4 +92,9 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
+
+    public Fragment getFragment(int index) {
+        return pageReferenceMap.get(index) ;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.thonners.pubgolf;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng ;
@@ -10,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng ;
  * @author M Thomas
  * @since 26/03/17
  */
-public class Hole {
+public class Hole implements Parcelable{
 
     private int holeNo ;
     private Pub pub ;
@@ -24,6 +25,17 @@ public class Hole {
         this.pub = pub ;
         this.holeNo = number ;
         this.drink = drink ;
+    }
+
+    /**
+     * Parcelable constructor
+     * @param in The Parcel
+     */
+    public Hole(Parcel in) {
+        this.holeNo = in.readInt() ;
+        this.pub = in.readParcelable(Pub.class.getClassLoader()) ;
+        this.drink = in.readParcelable(Drink.class.getClassLoader()) ;
+        this.shots = in.readInt() ;
     }
 
     public String getPubName() {
@@ -83,10 +95,56 @@ public class Hole {
         return pub;
     }
 
+
+    // Parcelable stuff below...
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Write the details to a parcel
+     * @param dest The parcel to be written to
+     * @param flags Parcel flags (?)
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(holeNo);
+        dest.writeParcelable(pub,flags);
+        dest.writeParcelable(drink,flags);
+        dest.writeInt(shots);
+    }
+
+
+    /**
+     * Parcelable CREATOR for the Hole class.
+     */
+    public static final Hole.Creator<Hole> CREATOR = new Parcelable.Creator<Hole>() {
+        /**
+         * Calls the private constructor to make a Pub instance from a Parcel
+         * @param in The Parel instance
+         * @return The newly created Pub instance
+         */
+        @Override
+        public Hole createFromParcel(Parcel in) {
+            return new Hole(in) ;
+        }
+
+        /**
+         * Constructor to create an array (? Not really sure what this is for)
+         * @param size Size of the array to be created
+         * @return The Pub Array
+         */
+        @Override
+        public Hole[] newArray(int size) {
+            return new Hole[size] ;
+        }
+    } ;
+
     /**
      * Class to hold the details of the hole's pub/bar
      */
-    public static class Pub {
+    public static class Pub implements  Parcelable{
 
         private LatLng location ;
         private String name ;
@@ -120,9 +178,66 @@ public class Hole {
             return name;
         }
 
+        /**
+         * @param name Name of the establishment
+         */
         public void setName(String name) {
             this.name = name;
         }
+
+        /**
+         * Parcelable Writer
+         * @param dest
+         * @param flags
+         */
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(name);
+            dest.writeParcelable(location, flags);
+        }
+
+        /**
+         * Parcelable writer - describe contents
+         * @return
+         */
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        /**
+         * Constructor for parcelable
+         * @param in The Parcel containing the info to rebuild the instance
+         */
+        private Pub(Parcel in) {
+            this.name = in.readString() ;
+            this.location = in.readParcelable(LatLng.class.getClassLoader()) ;
+        }
+
+        /**
+         * Parcelable CREATOR for the Pub class.
+         */
+        public static final Pub.Creator<Pub> CREATOR = new Parcelable.Creator<Pub>() {
+            /**
+             * Calls the private constructor to make a Pub instance from a Parcel
+             * @param in The Parel instance
+             * @return The newly created Pub instance
+             */
+            @Override
+            public Pub createFromParcel(Parcel in) {
+                return new Pub(in) ;
+            }
+
+            /**
+             * Constructor to create an array (? Not really sure what this is for)
+             * @param size Size of the array to be created
+             * @return The Pub Array
+             */
+            @Override
+            public Pub[] newArray(int size) {
+                return new Pub[size] ;
+            }
+        } ;
     }
 
 

@@ -42,6 +42,7 @@
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="footer_button_text">
         <item name="android:color">@color/primary_light</item>
         <item name="android:layout_height">match_parent</item>
@@ -56,6 +57,7 @@
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/slide_left_exit</item>
     </style>
+
     <style name="dialog_animation_slide_in_fade_out">
         <item name="android:windowEnterAnimation">@anim/slide_left_entry</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>

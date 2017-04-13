@@ -264,7 +264,7 @@ public class ScorecardLayout extends LinearLayout {
                             // Create TextView instance
                             //view = createTextView(text, col) ;
                             view = createPubTextView(hole.getPub()) ;
-                            view.setOnClickListener((HomeActivity) context);
+                            view.setOnClickListener((GolfRoundActivity) context);
                             break;
                         case 2:
                             text = hole.getDrink().getName() ;

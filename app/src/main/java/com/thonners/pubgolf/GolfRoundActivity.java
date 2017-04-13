@@ -2,9 +2,13 @@ package com.thonners.pubgolf;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,43 +17,62 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+public class GolfRoundActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,  PubTextView.OnClickListener, Footer.FooterInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener {
 
+    private final static String LOG_TAG = "GolfRoundActivity" ;
+    private static final int SCORECARD_FOOTER_BUTTON_ID = 0 ;
+    private static final int MAP_FOOTER_BUTTON_ID = 1 ;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener, PubTextView.OnClickListener, GolfCourseMapFragment.OnGCMapFragmentInteraction{
+    public static final String COURSE = "com.thonners.pubgolf.COURSE" ;
 
-    private final String LOG_TAG = "LaunchActivityFragment" ;
-
-    private Course courseToLoad ;
-    private CourseManager cm = new CourseManager() ;
-
-    private GolfRoundActivityFragment graf = null;
-    private GolfCourseMapFragment gcmf = null ;
+    private Course course ;
+    private Footer footer ;
+    private ViewPager viewPager ;
+    private GolfRoundViewPagerAdapter pagerAdapter ;
+    private ScorecardFragment scorecardFragment ;
+    private GolfCourseMapFragment mapFragment ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        // Create the toolbar
+        setContentView(R.layout.activity_golf_round);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Create an instance of the main launch fragment
-        swapFragment(LaunchActivityFragment.class) ;
+        // Get the intent extras
+        Intent intent = getIntent() ;
+        // Get the course
+        course = intent.getParcelableExtra(COURSE) ;
+
+        // Set the activity title
+        getSupportActionBar().setTitle(course.getName());
+
+        // Get the view instances
+        viewPager = (ViewPager) findViewById(R.id.fragment_view_pager) ;
+        footer = (Footer) findViewById(R.id.footer) ;
+        footer.setFooterInteractionListener(this);
+
+        // Create the pager adapter and set the viewPager to use it
+        pagerAdapter = new GolfRoundViewPagerAdapter(getSupportFragmentManager(), course);
+        viewPager.setAdapter(pagerAdapter);
+        // Prevent the viewPager destroying fragments/views when they're offscreen
+        viewPager.setOffscreenPageLimit(pagerAdapter.getCount());
+        // Add the footer button as an onPageChange listener
+        viewPager.addOnPageChangeListener(footer);
+        // Create the footer buttons
+        createFooterButtons() ;
+
     }
 
     @Override
@@ -65,7 +88,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.golf_round, menu);
         return true;
     }
 
@@ -108,7 +131,6 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     private void swapFragment(Class fragmentClass) {
         Fragment fragment = null ;
         try {
@@ -118,78 +140,50 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        if (fragment instanceof GolfRoundActivityFragment) {
-            graf = (GolfRoundActivityFragment) fragment ;
-        } else {
-            graf = null ;
-        }
-
         FragmentManager fragmentManager = getSupportFragmentManager() ;
         fragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).commit();
 
     }
 
-    @Override
-    public void joinGame() {
-        Toast.makeText(this,"Functionality not yet live.\nPlease create a new game.", Toast.LENGTH_LONG).show();
+    /**
+     * Method to populate the footer with the required buttons
+     */
+    private void createFooterButtons() {
+        // Scorecard button
+        footer.addButton(getString(R.string.footer_button_scorecard), R.drawable.ic_content_paste_black_36dp);
+        // Map button
+        footer.addButton(getString(R.string.footer_button_map), R.drawable.ic_golf_course_black_36dp);
     }
 
-    /**
-     * Interface method to be called from the LaunchActivityFragment to create a new scorecard
-     */
     @Override
-    public void launchNewGame(Course courseToLoad) {
-        // TODO: Get the course
-        this.courseToLoad = courseToLoad ;
-        getSupportActionBar().setTitle(courseToLoad.getName());
-        //swapFragment(ScorecardFragment.class);
-        //swapFragment(GolfRoundActivityFragment.class);
-        Intent newRound = new Intent(this,GolfRoundActivity.class) ;
-        //newRound.putExtra("CourseName",courseToLoad.getName()) ;
-        newRound.putExtra(GolfRoundActivity.COURSE,courseToLoad) ;
-        startActivity(newRound);
-    }
-
-    /*@Override
-    public Course getCourse() {
-        return courseToLoad ;
-    } //*/
-
-    /**
-     * Method to switch to the Map fragment and show the pub
-     * @param pub The pub to be displayed on the map
-     */
-    @Override
-    public void goToPub(Hole.Pub pub){
-        if (graf != null && gcmf != null) {
-            graf.showMap();
-            gcmf.goToPub(pub);
-        } else {
-            Log.d(LOG_TAG,"graf is null, so can't show pub on map!") ;
-            Toast.makeText(this, "Would show pub: " + pub.getName() + " on map, but something's gone wrong.", Toast.LENGTH_SHORT).show();
+    public void footerButtonClicked(int buttonID) {
+        switch (buttonID) {
+            default:
+                // Catch anything else at this stage and let it fall through to scorecard
+            case SCORECARD_FOOTER_BUTTON_ID:
+                Log.d(LOG_TAG,"Scorecard footer button clicked") ;
+                viewPager.setCurrentItem(SCORECARD_FOOTER_BUTTON_ID);
+                break;
+            case MAP_FOOTER_BUTTON_ID:
+                Log.d(LOG_TAG,"Map footer button clicked") ;
+                showMap() ;
+                break;
         }
     }
 
-    /*@Override
-    public void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) {
-        gcmf = gcMapFragment ;
-    }//*/
-
     /**
-     * @return An ArrayList of the available courses
+     * Method to change view pager to display the Map fragment
      */
-    @Override
-    public ArrayList<Course> getCourses() {
-        return cm.getCourses() ;
+    public void showMap() {
+        viewPager.setCurrentItem(MAP_FOOTER_BUTTON_ID);
     }
 
-    /**
-     * Method to launch the course manager
-     */
     @Override
-    public void getMoreCourses() {
-        //TODO: Implement this method
-        Log.d(LOG_TAG, "Would switch to the CourseManager fragment now...") ;
+    public void goToPub(Hole.Pub pub) {
+            Log.d(LOG_TAG, "Calling goToPub on the mapFragment") ;
+        ((GolfCourseMapFragment) pagerAdapter.getFragment(MAP_FOOTER_BUTTON_ID)).goToPub(pub);
+            Log.d(LOG_TAG, "showing the map") ;
+        showMap() ;
     }
 
     @Override
@@ -202,5 +196,4 @@ public class HomeActivity extends AppCompatActivity
             Log.d(LOG_TAG, "Unrecognised view was just clicked") ;
         }
     }
-
 }

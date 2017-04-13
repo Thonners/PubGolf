@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallback{
 
+    private final static String COURSE_PARCELABLE = "com.thonners.pubgolf.GCFragment.COURSE" ;
     private GoogleMap map ;
 
     private Course course ;
@@ -38,8 +39,8 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
     private OnGCMapFragmentInteraction mListener ;
 
     public interface OnGCMapFragmentInteraction {
-        Course getCourse() ;
-        void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) ;
+//        Course getCourse() ;
+//        void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) ;
     }
 
     /**
@@ -54,8 +55,11 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
      * is called by the framework.
      * @return An instance of type GolfCourseMapFragment, with arguments attached in a bundle.
      */
-    public static GolfCourseMapFragment newInstance() {
+    public static GolfCourseMapFragment newInstance(Course course) {
         GolfCourseMapFragment fragment = new GolfCourseMapFragment() ;
+        Bundle args = new Bundle();
+        args.putParcelable(COURSE_PARCELABLE, course);
+        fragment.setArguments(args);
         return fragment ;
     }
 
@@ -64,7 +68,7 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            // Get arguments here if required
+            this.course = getArguments().getParcelable(COURSE_PARCELABLE) ;
         }
     }
 
@@ -90,7 +94,7 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onStart() {
         super.onStart();
-        mListener.setGolfCourseMapFragment(this);
+  //      mListener.setGolfCourseMapFragment(this);
     }
 
     /**
@@ -100,24 +104,24 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onStop() {
         super.onStop();
-        mListener.setGolfCourseMapFragment(null);
+    //    mListener.setGolfCourseMapFragment(null);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnGCMapFragmentInteraction) {
+/*        if (context instanceof OnGCMapFragmentInteraction) {
             mListener = (OnGCMapFragmentInteraction) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnLaunchFragmentInteractionListener");
-        }
+        } //*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+  //      mListener = null;
     }
     /**
      * Callback method for when the map is ready
@@ -125,6 +129,7 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+            Log.d("MapFrag", "Map ready ");
         this.map = googleMap ;
         addCourseMarkers() ;
     }
@@ -133,7 +138,6 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
      * Method to add all the markers for a course
      */
     private void addCourseMarkers() {
-        course = mListener.getCourse() ;
         for (Hole hole : course.getHoles()) {
             addHoleMarker(hole);
         }
@@ -157,7 +161,10 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
      */
     public void goToPub(Hole.Pub pub) {
         if (map != null) {
+            Log.d("MapFrag", "goToPub called for: " + pub.getName()) ;
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(pub.getLocation(), 17f));
+        } else {
+            Log.d("MapFrag", "Map is null ");
         }
     }
 }

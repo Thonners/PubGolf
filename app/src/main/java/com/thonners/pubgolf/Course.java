@@ -1,5 +1,8 @@
 package com.thonners.pubgolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -9,15 +12,31 @@ import java.util.ArrayList;
  * @since 26/03/17
  */
 
-public class Course  {
+public class Course implements Parcelable {
 
     private final int defaultCourseLength = 9 ;
 
+    private int id ;
     private String name ;
     private ArrayList<Hole> holes = new ArrayList<>();
 
-    public Course(String name) {
+    /**
+     * Constructor
+     * @param id Course Unique ID
+     * @param name Name of the course
+     */
+    public Course(int id, String name) {
+        this.id = id ;
         this.name = name ;
+    }
+    /**
+     * Parcelable Constructor
+     * @param in The Parcel containing the info
+     */
+    public Course(Parcel in) {
+        this.id = in.readInt() ;
+        this.name = in.readString() ;
+        in.readTypedList(this.holes, Hole.CREATOR) ;
     }
 
     /**
@@ -52,9 +71,13 @@ public class Course  {
         return name;
     }
 
-    /*
-     * DELETE THE BELOW IF PARCELABLE NOT USED
-     *
+    /**
+     * @return This course's unique ID
+     */
+    public int getId() {
+        return id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -62,8 +85,35 @@ public class Course  {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        //dest.writeParcelable(holes);
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeTypedList(holes);
     }
-     *
+
+
+    /**
+     * Parcelable CREATOR for the Course class.
      */
+    public static final Course.Creator<Course> CREATOR = new Parcelable.Creator<Course>() {
+        /**
+         * Calls the private constructor to make a Course instance from a Parcel
+         * @param in The Parel instance
+         * @return The newly created Course instance
+         */
+        @Override
+        public Course createFromParcel(Parcel in) {
+            return new Course(in) ;
+        }
+
+        /**
+         * Constructor to create an array (? Not really sure what this is for)
+         * @param size Size of the array to be created
+         * @return The Course Array
+         */
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size] ;
+        }
+    } ;
+
 }

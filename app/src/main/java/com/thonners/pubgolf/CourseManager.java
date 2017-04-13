@@ -28,7 +28,7 @@ public class CourseManager {
      * Method to create the default Marylebone Links course
      */
     private void createDefaultCourse() {
-        Course mbLinks = new Course("Marylebone Links");
+        Course mbLinks = new Course(courses.size(), "Marylebone Links");
         mbLinks.addHole(new Hole(new Hole.Pub("The Barley Mow", new LatLng(51.512913,-0.150978)), 1, new Drink("Ale", Drink.Type.PINT,3)));
         mbLinks.addHole(new Hole(new Hole.Pub("Henry Holland", new LatLng(51.514689, -0.151431)), 2, new Drink("Lager", Drink.Type.PINT,4)));
         mbLinks.addHole(new Hole(new Hole.Pub("Devonshire Arms", new LatLng(51.51602, -0.152169)), 3, new Drink("Bitter", Drink.Type.PINT,3)));
@@ -42,16 +42,16 @@ public class CourseManager {
         // Add it to the list
         addCourse(mbLinks);
 
-        Course mbLinks2 = new Course("Marylebone Links Back 9");
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 1, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 2, new Drink("Ale", Drink.Type.PINT,3)));
+        Course mbLinks2 = new Course(courses.size(), "Marylebone Links Back 9");
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 1, new Drink("Ale", Drink.Type.PINT,1)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 2, new Drink("Ale", Drink.Type.PINT,2)));
         mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 3, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 4, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 5, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 6, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 7, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 8, new Drink("Ale", Drink.Type.PINT,3)));
-        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 9, new Drink("Ale", Drink.Type.PINT,3)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 4, new Drink("Ale", Drink.Type.PINT,4)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 5, new Drink("Ale", Drink.Type.PINT,5)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 6, new Drink("Ale", Drink.Type.PINT,6)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 7, new Drink("Ale", Drink.Type.PINT,7)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 8, new Drink("Ale", Drink.Type.PINT,8)));
+        mbLinks2.addHole(new Hole(new Hole.Pub("Bloomsbury Lanes", new LatLng(51.5239426,-0.128537)), 9, new Drink("Ale", Drink.Type.PINT,9)));
 
         // Add it to the list
         addCourse(mbLinks2);
@@ -90,5 +90,13 @@ public class CourseManager {
         course.addHole(hole);
     }
 
+    /**
+     * TODO: Make this use more robust idenification method
+     * @param courseID The ID of the course
+     * @return The course instance of the corresponding ID
+     */
+    public Course getCourse(int courseID) {
+        return courses.get(courseID) ;
+    }
 
 }

@@ -83,7 +83,7 @@ public class GolfRoundActivityFragment extends Fragment implements Footer.Footer
         footer.setFooterInteractionListener(this);
 
         // Create the pager adapter and set the viewPager to use it
-        pagerAdapter = new GolfRoundViewPagerAdapter(getFragmentManager());
+        pagerAdapter = new GolfRoundViewPagerAdapter(getFragmentManager(), new Course(1, "DE:ETE THIS LINE"));
         viewPager.setAdapter(pagerAdapter);
         // Prevent the viewPager destroying fragments/views when they're offscreen
         viewPager.setOffscreenPageLimit(pagerAdapter.getCount());

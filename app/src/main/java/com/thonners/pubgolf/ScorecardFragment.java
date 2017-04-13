@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 public class ScorecardFragment extends Fragment implements ScorecardLayout.OnScorecardLayoutInteractionListener{
 
     private final String LOG_TAG = "ScorecardFragment" ;
+
+    private final static String COURSE_PARCELABLE = "com.thonners.pubgolf.ScorecardFragment.COURSE" ;
     private Course course ;
     private ScorecardLayout scorecardLayout ;
 
@@ -34,21 +36,19 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
      * @return A new instance of fragment ScorecardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScorecardFragment newInstance() {
+    public static ScorecardFragment newInstance(Course course) {
         ScorecardFragment fragment = new ScorecardFragment();
-       /* Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
+        Bundle args = new Bundle();
+        args.putParcelable(COURSE_PARCELABLE, course);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {/*
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);*/
+        if (getArguments() != null) {
+            this.course = getArguments().getParcelable(COURSE_PARCELABLE) ;
         }
     }
 
@@ -58,7 +58,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scorecard, container, false);
         scorecardLayout = (ScorecardLayout) view.findViewById(R.id.scorecard_layout);
-        course = mListener.getCourse() ;
+        //course = mListener.getCourse() ;
         scorecardLayout.setOnScorecardLayoutInteractionListener(this);
         return view ;
     }
@@ -92,7 +92,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnScorecardFragmentInteractionListener {
-        Course getCourse();
+    //    Course getCourse();
         void goToPub(Hole.Pub pub) ;
     }
 
