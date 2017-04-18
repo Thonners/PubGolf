@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.thonners.pubgolf.RulesActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/sc_outer_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rules_title"
+                style="@style/rules_title"
+                android:text="@string/rules_title"/>
+            <TextView
+                android:id="@+id/rules_aim_title"
+                style="@style/rules_subtitle"
+                android:text="@string/rules_aim_subtitle"/>
+            <TextView
+                android:id="@+id/rules_aim_body"
+                style="@style/rules_body"
+                android:text="@string/rules_aim_body"/>
+            <TextView
+                android:id="@+id/rules_subtitle"
+                style="@style/rules_subtitle"
+                android:text="@string/rules_subtitle"/>
+            <TextView
+                android:id="@+id/rules_body"
+                style="@style/rules_body"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

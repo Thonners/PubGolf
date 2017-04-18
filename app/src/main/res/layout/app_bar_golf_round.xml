@@ -20,7 +20,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_golf_round" />
+    <FrameLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/content_golf_round" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

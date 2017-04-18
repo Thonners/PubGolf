@@ -12,6 +12,9 @@
     <dimen name="scorecard_header_text_size">12sp</dimen>
     <dimen name="footer_button_text_size_focused">14sp</dimen>
     <dimen name="footer_button_text_size_not_focused">12sp</dimen>
+    <dimen name="rules_title">18sp</dimen>
+    <dimen name="rules_subtitle">16sp</dimen>
+    <dimen name="rules_body">14sp</dimen>
 
     <!-- Images -->
     <dimen name="launch_card_icon">32dp</dimen>

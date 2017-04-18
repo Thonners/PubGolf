@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rules_activity_title">Rules and Regs.</string>
+    <string name="rules_title">Pub Golf Rules and Regulations</string>
+    <string name="rules_aim_subtitle">AIM</string>
+    <string name="rules_aim_body">To drink one\'s drink in as few sips as possible</string>
+    <string name="rules_subtitle">RULES AND REGULATIONS</string>
+    <array name="rules_entries">
+        <item>1). Pub Golf is a gentleman/gentlelady\'s game. Decorum shall be maintained throughout. Neither larger-loutism nor association football will be tolerated.</item>
+        <item>2). Golf attire is required on the course. Those not suitably dressed will receive a 2-shot penalty. This includes both hand- and knit-wear.</item>
+        <item>3). Golf is a trusting game. However, all shots must be taken within sight of an impartial umpire (or other player) for score verification. Video evidence may be required in the case of a \'perfect round\'.</item>
+        <item>4). \'Kicking the ball up the course\' through careless drink handling will result in a 3-shot penalty.</item>
+        <item>5). Slow play will be penalised by a 2-shot penalty.</item>
+        <item>6). The golfing party is an inseparable coterie. <b>All</b> players shall play <b>all</b> holes together. There will be no omissions. Latecomers should play the course properly, albeit quickly. Alternatively, they should replicate the preceding holes (in the correct order) at the current hole.</item>
+        <item>7). A \'gimme\' is not defined in pub golf. Those unable to finish a hole will receive a 12 on their scorecard.</item>
+        <item>8). The rights of water-closet visitation are reserved for players who have completed a hole. \'Irrigating the fairway\' is frowned upon, and testing a hole\'s groundkeeper is not recommended.</item>
+        <item>9). Any player who \'re-plays\' a hole will receive a 3-shot penalty.</item>
+        <item>10). Should further clarification of these rules be required, the course official will clear all ambiguity. They are also responsible for time-keeping and discipline. In the case of the latter, it is on all players to respect and uphold these rules.</item>
+    </array>
+
+</resources>

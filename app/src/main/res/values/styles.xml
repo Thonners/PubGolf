@@ -51,6 +51,23 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <!-- Rules fragment -->
+    <style name="rules_body">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:color">@color/primary_text</item>
+        <item name="android:textSize">@dimen/rules_body</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+    <style name="rules_title" parent="rules_body">
+        <item name="android:textSize">@dimen/rules_title</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="rules_subtitle" parent="rules_body">
+        <item name="android:textSize">@dimen/rules_subtitle</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
 
     <!-- Animations -->
     <style name="dialog_animation_fade_in_slide_out">

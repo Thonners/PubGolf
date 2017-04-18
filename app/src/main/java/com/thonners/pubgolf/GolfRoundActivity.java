@@ -113,19 +113,26 @@ public class GolfRoundActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_scorecard) {
-            // Handle the camera action
-        } else if (id == R.id.nav_map) {
-
-        } else if (id == R.id.nav_rules) {
-
-        } else if (id == R.id.nav_manage_course) {
-
-        } else if (id == R.id.nav_manage_drinks) {
-
-        } else if (id == R.id.nav_add_players) {
-
+        switch (id) {
+            case R.id.nav_scorecard:
+                showScorecard();
+                break;
+            case R.id.nav_map:
+                showMap();
+                break;
+            case R.id.nav_rules:
+                showRules();
+                break;
+            case R.id.nav_manage_course:
+                break;
+            case R.id.nav_manage_drinks:
+                break;
+            case R.id.nav_add_players:
+                break;
+            case R.id.nav_share_scorecard:
+                break;
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -162,7 +169,7 @@ public class GolfRoundActivity extends AppCompatActivity
                 // Catch anything else at this stage and let it fall through to scorecard
             case SCORECARD_FOOTER_BUTTON_ID:
                 Log.d(LOG_TAG,"Scorecard footer button clicked") ;
-                viewPager.setCurrentItem(SCORECARD_FOOTER_BUTTON_ID);
+                showScorecard();
                 break;
             case MAP_FOOTER_BUTTON_ID:
                 Log.d(LOG_TAG,"Map footer button clicked") ;
@@ -176,6 +183,21 @@ public class GolfRoundActivity extends AppCompatActivity
      */
     public void showMap() {
         viewPager.setCurrentItem(MAP_FOOTER_BUTTON_ID);
+    }
+
+    /**
+     * Method to show the scorecard tab/fragment
+     */
+    private void showScorecard() {
+        viewPager.setCurrentItem(SCORECARD_FOOTER_BUTTON_ID);
+    }
+
+    /**
+     * Method to launch the {@link RulesActivity}.
+     */
+    private void showRules() {
+        Intent rulesIntent = new Intent(this,RulesActivity.class) ;
+        startActivity(rulesIntent);
     }
 
     @Override

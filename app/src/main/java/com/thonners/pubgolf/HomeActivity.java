@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener, PubTextView.OnClickListener, GolfCourseMapFragment.OnGCMapFragmentInteraction{
+        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, /*ScorecardFragment.OnScorecardFragmentInteractionListener, *//*PubTextView.OnClickListener,*/ GolfCourseMapFragment.OnGCMapFragmentInteraction{
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
 
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -90,19 +90,19 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_scorecard) {
-            // Handle the camera action
-        } else if (id == R.id.nav_map) {
-
-        } else if (id == R.id.nav_rules) {
-
-        } else if (id == R.id.nav_manage_course) {
-
-        } else if (id == R.id.nav_manage_drinks) {
-
-        } else if (id == R.id.nav_add_players) {
-
+        switch (id) {
+            case R.id.nav_scorecard:
+                break;
+            case R.id.nav_map:
+                break;
+            case R.id.nav_rules:
+                break;
+            case R.id.nav_manage_course:
+                break;
+            case R.id.nav_manage_drinks:
+                break;
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -155,11 +155,11 @@ public class HomeActivity extends AppCompatActivity
         return courseToLoad ;
     } //*/
 
-    /**
+    /**DELETE THIS METHOD & REMOVE LISTENER IMPLEMENTATION AS NOT USED
      * Method to switch to the Map fragment and show the pub
      * @param pub The pub to be displayed on the map
      */
-    @Override
+/*    @Override
     public void goToPub(Hole.Pub pub){
         if (graf != null && gcmf != null) {
             graf.showMap();
@@ -168,7 +168,7 @@ public class HomeActivity extends AppCompatActivity
             Log.d(LOG_TAG,"graf is null, so can't show pub on map!") ;
             Toast.makeText(this, "Would show pub: " + pub.getName() + " on map, but something's gone wrong.", Toast.LENGTH_SHORT).show();
         }
-    }
+    }//*/
 
     /*@Override
     public void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) {
@@ -192,7 +192,11 @@ public class HomeActivity extends AppCompatActivity
         Log.d(LOG_TAG, "Would switch to the CourseManager fragment now...") ;
     }
 
-    @Override
+    /**DELETE THIS METHOD & REMOVE LISTENER IMPLEMENTATION AS NOT USED
+     *
+     * @param view
+     */
+/*    @Override
     public void onClick(View view) {
         // Pub clicks
         if (view instanceof PubTextView) {
@@ -201,6 +205,6 @@ public class HomeActivity extends AppCompatActivity
         } else {
             Log.d(LOG_TAG, "Unrecognised view was just clicked") ;
         }
-    }
+    }//*/
 
 }
