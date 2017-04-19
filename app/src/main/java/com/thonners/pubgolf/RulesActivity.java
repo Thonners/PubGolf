@@ -1,9 +1,11 @@
 package com.thonners.pubgolf;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -14,6 +16,8 @@ import android.widget.TextView;
  */
 public class RulesActivity extends AppCompatActivity {
 
+    public static final String RULES_EXTRA = "com.thonners.pubgolf.rules" ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,17 +27,27 @@ public class RulesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.rules_activity_title));
 
+        // Get the intent and the custom rule-set if it exists
+        Intent intent = getIntent() ;
+        String[] rulesArray ;
+        if (intent != null && intent.getExtras() != null && intent.getExtras().containsKey(RULES_EXTRA)) {
+            rulesArray = intent.getStringArrayExtra(RULES_EXTRA);
+        } else {
+            // Otherwise use the default rules
+            rulesArray = getResources().getStringArray(R.array.rules_entries) ;
+        }
+
         // Populate the rules...
         // Get the view instance
-        TextView rulesBody = (TextView) findViewById(R.id.rules_body) ;
-        // Get the rules
-        String[] rulesArray = getResources().getStringArray(R.array.rules_entries) ;
-        // Initialise the string we'll add to the textview
-        String rules = "" ;
+        LinearLayout layout = (LinearLayout) findViewById(R.id.rules_linear_layout) ;
+        // Initialise the rule counter
+        int ruleNo = 1 ;
         for (String rule : rulesArray) {
-            rules += rule + "\n" ;  // Add a new line to the end of the string
+          //  rules += rule + "\n" ;  // Add a new line to the end of the string
+            RulesEntry entry = new RulesEntry(this,ruleNo,rule) ;
+            layout.addView(entry);
+            ruleNo++ ;
         }
-        rulesBody.setText(rules);
     }
 
     /**
