@@ -104,12 +104,6 @@ public class ScorecardLayout extends LinearLayout {
         newRow.setAlpha(0.0f);
         rows.add(newRow) ;
         this.addView(rows.get(0));
-   /*     newRow.post(new Runnable() {
-            @Override
-            public void run() {
-                mListener.populateScorecard() ;
-            }
-        }) ; */
         newRow.animate()
                 .alpha(1.0f)
                 .setDuration(300)
@@ -135,6 +129,11 @@ public class ScorecardLayout extends LinearLayout {
                     }
                 })
                 .start();
+    }
+
+    private void createFooterRow() {
+        ScorecardRow newRow = new ScorecardRow(context, 0) ;
+
     }
 
     /**
@@ -192,7 +191,7 @@ public class ScorecardLayout extends LinearLayout {
         public ScorecardRow(Context context, int rowNo) {
             super(context);
             this.context = context ;
-            this.rowNo = 0 ;
+            this.rowNo = rowNo ;
             initialiseRow();
         }
         public ScorecardRow(Context context, Hole hole) {
@@ -201,7 +200,8 @@ public class ScorecardLayout extends LinearLayout {
             if (hole == null) {
                 Log.d(LOG_TAG, "Hole is coming through as null");
                 // Then it's the header row
-                this.rowNo = 1 ;
+                // Don't think we should do this - we should remove support for null hole
+                this.rowNo = 0 ;
             } else {
                 // The hole number corresponds to its row number
                 this.rowNo = hole.getHoleNo();
@@ -240,6 +240,70 @@ public class ScorecardLayout extends LinearLayout {
             View view ;
             // Loop through each column and create the appropriate view
             for (int col = 0 ; col < noColumns ; col++) {
+                switch (rowNo) {
+                    case 0:
+                        // Header row
+                        // Get the appropriate text to display
+                        if (col < headers.length) {
+                            text = headers[col];
+                        } else {
+                            text = players.get(col - headers.length).getName();
+                        }
+                        // Create TextView instance
+                        view = createTextView(text, col);
+                        // Set the layout parameters
+                        view.setLayoutParams(getLayoutParamsPG(0, col));
+                        break;
+                    case -1:
+                        // Total row
+                        if (col < headers.length) {
+                            text = getResources().getString(R.string.scorecard_total) ;
+                            // Create TextView instance
+                            view = createTextView(text, col);
+                        } else {
+                            view = new ScorecardTotalTextView(context);
+                            // TODO: Add all the edittexts
+                        }
+                        // Set the layout parameters
+                        view.setLayoutParams(getLayoutParamsPG(0, col));
+                        break;
+                    default:
+                        // Standard row
+                        // Create view based on the column
+                        switch (col) {
+                            case 0:
+                                text = hole.getHoleNo() + "";
+                                // Create TextView instance
+                                view = createTextView(text, col);
+                                break;
+                            case 1:
+                                //text = hole.getPubName() ;
+                                // Create TextView instance
+                                //view = createTextView(text, col) ;
+                                view = createPubTextView(hole.getPub());
+                                view.setOnClickListener((GolfRoundActivity) context);
+                                break;
+                            case 2:
+                                text = hole.getDrink().getName();
+                                // Create TextView instance
+                                view = createTextView(text, col);
+                                break;
+                            case 3:
+                                text = hole.getDrink().getPar() + "";
+                                // Create TextView instance
+                                view = createTextView(text, col);
+                                break;
+                            default:
+                                view = createEditText(col);
+                                break;
+                        }
+                        view.setLayoutParams(getLayoutParamsPG(rowNo, col));
+                        break;
+
+                }
+                // Add to the view
+                this.addView(view);
+
                 if (hole == null) {
                     // Get the appropriate text to display
                     if (col < headers.length) {

@@ -39,6 +39,7 @@
         <item name="sc_header_p1">Player 1
         </item> <!-- Remove this when adding players / names implemented -->
     </array>
+    <string name="scorecard_total">Total:</string>
 
 
     <!-- Auto-created strings -->
