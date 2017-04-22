@@ -5,8 +5,11 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,8 +40,9 @@ public class ScorecardLayout extends LinearLayout {
     // Initialise to default of 9
     private int noHoles = 9;
     private Context context ;
-    private ArrayList<ScorecardRow> rows = new ArrayList<>() ;
-    private ArrayList<Player> players = new ArrayList<>() ;
+    private final ArrayList<ScorecardRow> rows = new ArrayList<>() ;
+    private final ArrayList<Player> players = new ArrayList<>() ;
+    private final ArrayList<ScorecardTotalTextView> totals = new ArrayList<>() ;
 
     private OnScorecardLayoutInteractionListener mListener ;
 
@@ -95,12 +99,13 @@ public class ScorecardLayout extends LinearLayout {
 
     /**
      * Creates the header row for the scorecard. When the scorecard row is created and has been drawn
-     * this method calls populateScorecard on the listener, which then creates the rest of the scorecard's views.
+     * this method calls createFooterRow, which in turn calls populateScorecard on the listener,
+     * which then creates the rest of the scorecard's views.
      * This delay is required so that the calls to 'getWidth()' on the header row's views return correctly.
      * If there is no delay, the width is reported as '0', as the call happens before the drawing has finished.
      */
     private void createHeaderRow() {
-        ScorecardRow newRow = new ScorecardRow(context, 0) ;
+        ScorecardRow newRow = new ScorecardRow(context, ScorecardRow.HEADER) ;
         newRow.setAlpha(0.0f);
         rows.add(newRow) ;
         this.addView(rows.get(0));
@@ -115,7 +120,7 @@ public class ScorecardLayout extends LinearLayout {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mListener.populateScorecard() ;
+                        createFooterRow();
                     }
 
                     @Override
@@ -131,9 +136,31 @@ public class ScorecardLayout extends LinearLayout {
                 .start();
     }
 
+    /**
+     * Creates the footer (i.e. total) row. When created, it will be invisible (alpha=0). This method
+     * then calls populateScorecard on the listener, which fills in the rest of the rows before
+     * making this row visible by calling {@link #showTotalRow()}.
+     */
     private void createFooterRow() {
-        ScorecardRow newRow = new ScorecardRow(context, 0) ;
+        ScorecardRow newRow = new ScorecardRow(context, ScorecardRow.TOTAL) ;
+        newRow.setAlpha(0.0f);
+        newRow.setTranslationY((getResources().getDimension(R.dimen.sc_row_height)));
+        rows.add(newRow) ;
+        this.addView(newRow);
+        mListener.populateScorecard();
+    }
 
+    /**
+     * Reveals the 'Total' row, using the same animation as usual
+     */
+    public void showTotalRow() {
+        rows.get(1).animate()
+                .alpha(1.0f)
+                .translationY(0)
+                .setDuration(300)
+                .setStartDelay(100*(rows.size()-1))
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
     }
 
     /**
@@ -145,7 +172,7 @@ public class ScorecardLayout extends LinearLayout {
         newRow.setAlpha(0.0f);
         newRow.setTranslationY((getResources().getDimension(R.dimen.sc_row_height)));
         rows.add(newRow) ;
-        this.addView(rows.get(hole.getHoleNo()));
+        this.addView(newRow,newRow.rowNo);
         newRow.animate()
                 .alpha(1.0f)
                 .translationY(0)
@@ -182,6 +209,9 @@ public class ScorecardLayout extends LinearLayout {
      * Basic class to hold the views in a row of the scorecard
      */
     private class ScorecardRow extends LinearLayout {
+
+        public static final int HEADER = 0 ;
+        public static final int TOTAL  = -1 ;
 
         private Context context ;
         protected int noColumns;
@@ -227,7 +257,7 @@ public class ScorecardLayout extends LinearLayout {
             // Set the height
             LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.getResources().getDimensionPixelOffset(R.dimen.sc_row_height)) ;
             this.setLayoutParams(lp);
-            // If it's the header row, create TextViews and populate them
+            // Create Views and populate them
             createViews() ;
         }
 
@@ -237,11 +267,11 @@ public class ScorecardLayout extends LinearLayout {
             // Get the total number of columns - standard columns + no. of players
             noColumns = headers.length + players.size() ;
             String text ;
-            View view ;
+            View view = null;
             // Loop through each column and create the appropriate view
             for (int col = 0 ; col < noColumns ; col++) {
                 switch (rowNo) {
-                    case 0:
+                    case HEADER:
                         // Header row
                         // Get the appropriate text to display
                         if (col < headers.length) {
@@ -252,20 +282,26 @@ public class ScorecardLayout extends LinearLayout {
                         // Create TextView instance
                         view = createTextView(text, col);
                         // Set the layout parameters
-                        view.setLayoutParams(getLayoutParamsPG(0, col));
+                       // view.setLayoutParams(getLayoutParamsPG(HEADER, col));
                         break;
-                    case -1:
+                    case TOTAL:
                         // Total row
-                        if (col < headers.length) {
-                            text = getResources().getString(R.string.scorecard_total) ;
-                            // Create TextView instance
-                            view = createTextView(text, col);
+                        if (col < 4) {
+                            // Only need to create one.
+                            if (col == 0) {
+                                text = getResources().getString(R.string.scorecard_total);
+                                // Create TextView instance
+                                view = createTextView(text, col);
+                            } else {
+                                view = null ;
+                            }
                         } else {
                             view = new ScorecardTotalTextView(context);
-                            // TODO: Add all the edittexts
+                            // Add to the collection
+                            totals.add((ScorecardTotalTextView) view) ;
                         }
                         // Set the layout parameters
-                        view.setLayoutParams(getLayoutParamsPG(0, col));
+                        //view.setLayoutParams(getLayoutParamsPG(TOTAL, col));
                         break;
                     default:
                         // Standard row
@@ -294,60 +330,21 @@ public class ScorecardLayout extends LinearLayout {
                                 view = createTextView(text, col);
                                 break;
                             default:
+                                // Player's score entry EditTexts
                                 view = createEditText(col);
+                                // Add the TextWatcher
+                                totals.get(col - 4).addEditText((EditText) view); // Hardcoded to '4' not the end of the world, but needs to be modified if columns added/removed
                                 break;
                         }
-                        view.setLayoutParams(getLayoutParamsPG(rowNo, col));
+                        //view.setLayoutParams(getLayoutParamsPG(rowNo, col));
                         break;
 
                 }
-                // Add to the view
-                this.addView(view);
-
-                if (hole == null) {
-                    // Get the appropriate text to display
-                    if (col < headers.length) {
-                        text = headers[col] ;
-                    } else {
-                        text = players.get(col - headers.length).getName() ;
-                    }
-                    // Create TextView instance
-                    view = createTextView(text, col) ;
-                    // Set the layout parameters
-                    view.setLayoutParams(getLayoutParamsPG(0,col));
-                } else {
-                    int rowNo = hole.getHoleNo() ;
-                    switch (col) {
-                        case 0:
-                            text = hole.getHoleNo() + "" ;
-                            // Create TextView instance
-                            view = createTextView(text, col) ;
-                            break;
-                        case 1:
-                            //text = hole.getPubName() ;
-                            // Create TextView instance
-                            //view = createTextView(text, col) ;
-                            view = createPubTextView(hole.getPub()) ;
-                            view.setOnClickListener((GolfRoundActivity) context);
-                            break;
-                        case 2:
-                            text = hole.getDrink().getName() ;
-                            // Create TextView instance
-                            view = createTextView(text, col) ;
-                            break;
-                        case 3:
-                            text = hole.getDrink().getPar() + "" ;
-                            // Create TextView instance
-                            view = createTextView(text, col) ;
-                            break;
-                        default:
-                            view = createEditText(col) ;
-                            break;
-                    }
-                    view.setLayoutParams(getLayoutParamsPG(rowNo,col));
+                if (view != null) {
+                    view.setLayoutParams(getLayoutParamsPG(rowNo, col));
+                    // Add to the view
+                    this.addView(view);
                 }
-                // Add to the view
-                this.addView(view);
             }
         }
 
@@ -369,11 +366,12 @@ public class ScorecardLayout extends LinearLayout {
             // Set the view ID
             tv.setId(column);
             // Set the style
-            if (Build.VERSION.SDK_INT < 23) {
+            TextViewCompat.setTextAppearance(tv,R.style.tv_scorecard_header);
+            /*if (Build.VERSION.SDK_INT < 23) {
                 tv.setTextAppearance(context, R.style.tv_scorecard_header);
             } else {
                 tv.setTextAppearance(R.style.tv_scorecard_header);
-            }
+            }*/
             // Set the text
             tv.setText(text);
             // Set the text appearance
@@ -408,11 +406,7 @@ public class ScorecardLayout extends LinearLayout {
             // Set the view ID
             et.setId(viewID);
             // Set the style
-            if (Build.VERSION.SDK_INT < 23) {
-                et.setTextAppearance(context, R.style.tv_scorecard_header);
-            } else {
-                et.setTextAppearance(R.style.tv_scorecard_header);
-            }
+            TextViewCompat.setTextAppearance(et,R.style.tv_scorecard_header);
             // Set the text appearance
             et.setTextAlignment(TEXT_ALIGNMENT_CENTER);
             et.setTypeface(Typeface.DEFAULT_BOLD);
@@ -440,16 +434,28 @@ public class ScorecardLayout extends LinearLayout {
          */
         private LayoutParams getLayoutParamsPG(int row, int col) {
             LayoutParams lp ;
-            if (row == 0) {
-                if (col == PUB_COLUMN || col == DRINK_COLUMN) {
-                    lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-                    lp.weight = 1.0f;
-                } else {
-                    lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                }
-            } else {
-                int width = rows.get(0).getView(col).getWidth();
-                lp = new LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT) ;
+            switch (row) {
+                case HEADER:
+                    if (col == PUB_COLUMN || col == DRINK_COLUMN) {
+                        lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+                        lp.weight = 1.0f;
+                    } else {
+                        lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    }
+                    break;
+                case TOTAL:
+                    if (col == 0) {
+                        lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+                        lp.weight = 1.0f;
+                    } else {
+                        int width = rows.get(0).getView(col).getWidth();
+                        lp = new LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT) ;
+                    }
+                    break;
+                default:
+                    int width = rows.get(0).getView(col).getWidth();
+                    lp = new LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT) ;
+                    break;
             }
             return lp ;
         }

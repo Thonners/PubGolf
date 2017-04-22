@@ -41,6 +41,7 @@
         <item name="android:textSize">@dimen/scorecard_header_text_size</item>
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/sc_text_padding</item>
     </style>
 
     <style name="footer_button_text">

@@ -108,6 +108,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         for (Hole hole : course.getHoles()) {
             scorecardLayout.addHole(hole);
         }
+        scorecardLayout.showTotalRow();
     }
 
 
