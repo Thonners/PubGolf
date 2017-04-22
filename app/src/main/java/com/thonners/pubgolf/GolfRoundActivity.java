@@ -80,6 +80,8 @@ public class GolfRoundActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (viewPager.getCurrentItem() > SCORECARD_FOOTER_BUTTON_ID) {
+            showScorecard();
         } else {
             super.onBackPressed();
         }
