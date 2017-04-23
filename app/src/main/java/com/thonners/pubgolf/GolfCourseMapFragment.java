@@ -35,6 +35,7 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
 
     private Course course ;
     private final ArrayList<Marker> holeMarkers = new ArrayList<>() ;
+    private final int[] holeMarkerDrawables = new int[19] ;
 
     private OnGCMapFragmentInteraction mListener ;
 
@@ -70,6 +71,8 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
         if (getArguments() != null) {
             this.course = getArguments().getParcelable(COURSE_PARCELABLE) ;
         }
+        // Populate the drawable resource references
+        getHoleMarkerDrawableResources() ;
     }
 
     @Override
@@ -152,8 +155,47 @@ public class GolfCourseMapFragment extends Fragment implements OnMapReadyCallbac
         mops.position(hole.getPub().getLocation())
                 .title("" + hole.getHoleNo())
                 .snippet(hole.getPubName())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_golf_course_black_36dp)) ;
+                .icon(BitmapDescriptorFactory.fromResource(getHoldMarkerDrawable(hole.getHoleNo()))) ;
         Marker holeMarker = map.addMarker(mops) ;
+    }
+
+    /**
+     * Gets the drawable resource int of the approprite flag for the given hole number. Should the
+     * hole number be >18, the returned flag will be blank
+     * @param holeNo The number of the hole for which this drawable will be displayed on the map
+     * @return The drawable resource int of the appropriate flag
+     */
+    private int getHoldMarkerDrawable(int holeNo) {
+        if (holeNo <= holeMarkerDrawables.length) {
+            return holeMarkerDrawables[holeNo] ;
+        } else {
+            return holeMarkerDrawables[0] ;
+        }
+    }
+
+    /**
+     * Populates the holeMarkerDrawables Array with the Resource int of the corresponding drawables
+     */
+    private void getHoleMarkerDrawableResources() {
+        holeMarkerDrawables[0] = R.drawable.ic_golf_flag_basic ;
+        holeMarkerDrawables[1] = R.drawable.ic_golf_flag_1 ;
+        holeMarkerDrawables[2] = R.drawable.ic_golf_flag_2 ;
+        holeMarkerDrawables[3] = R.drawable.ic_golf_flag_3 ;
+        holeMarkerDrawables[4] = R.drawable.ic_golf_flag_4 ;
+        holeMarkerDrawables[5] = R.drawable.ic_golf_flag_5 ;
+        holeMarkerDrawables[6] = R.drawable.ic_golf_flag_6 ;
+        holeMarkerDrawables[7] = R.drawable.ic_golf_flag_7 ;
+        holeMarkerDrawables[8] = R.drawable.ic_golf_flag_8 ;
+        holeMarkerDrawables[9] = R.drawable.ic_golf_flag_9 ;
+        holeMarkerDrawables[10] = R.drawable.ic_golf_flag_10 ;
+        holeMarkerDrawables[11] = R.drawable.ic_golf_flag_11 ;
+        holeMarkerDrawables[12] = R.drawable.ic_golf_flag_12 ;
+        holeMarkerDrawables[13] = R.drawable.ic_golf_flag_13 ;
+        holeMarkerDrawables[14] = R.drawable.ic_golf_flag_14 ;
+        holeMarkerDrawables[15] = R.drawable.ic_golf_flag_15 ;
+        holeMarkerDrawables[16] = R.drawable.ic_golf_flag_16 ;
+        holeMarkerDrawables[17] = R.drawable.ic_golf_flag_17 ;
+        holeMarkerDrawables[18] = R.drawable.ic_golf_flag_18 ;
     }
 
     /**
