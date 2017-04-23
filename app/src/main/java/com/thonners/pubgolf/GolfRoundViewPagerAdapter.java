@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * FragmentPagerAdapter to provide the fragments for the ViewPager in the {@link GolfRoundActivityFragment}
+ * FragmentPagerAdapter to provide the fragments for the ViewPager in the {@link GolfRoundActivity}
  *
  * @author M Thomas
  * @since 05/04/17

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,11 +23,7 @@ public class HomeActivity extends AppCompatActivity
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
 
-    private Course courseToLoad ;
     private CourseManager cm = new CourseManager() ;
-
-    private GolfRoundActivityFragment graf = null;
-    private GolfCourseMapFragment gcmf = null ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,13 +112,6 @@ public class HomeActivity extends AppCompatActivity
             Log.e(LOG_TAG, "Error creating launch activity fragment:");
             e.printStackTrace();
         }
-
-        if (fragment instanceof GolfRoundActivityFragment) {
-            graf = (GolfRoundActivityFragment) fragment ;
-        } else {
-            graf = null ;
-        }
-
         FragmentManager fragmentManager = getSupportFragmentManager() ;
         fragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).commit();
 
@@ -139,41 +127,11 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void launchNewGame(Course courseToLoad) {
-        // TODO: Get the course
-        this.courseToLoad = courseToLoad ;
         getSupportActionBar().setTitle(courseToLoad.getName());
-        //swapFragment(ScorecardFragment.class);
-        //swapFragment(GolfRoundActivityFragment.class);
         Intent newRound = new Intent(this,GolfRoundActivity.class) ;
-        //newRound.putExtra("CourseName",courseToLoad.getName()) ;
         newRound.putExtra(GolfRoundActivity.COURSE,courseToLoad) ;
         startActivity(newRound);
     }
-
-    /*@Override
-    public Course getCourse() {
-        return courseToLoad ;
-    } //*/
-
-    /**DELETE THIS METHOD & REMOVE LISTENER IMPLEMENTATION AS NOT USED
-     * Method to switch to the Map fragment and show the pub
-     * @param pub The pub to be displayed on the map
-     */
-/*    @Override
-    public void goToPub(Hole.Pub pub){
-        if (graf != null && gcmf != null) {
-            graf.showMap();
-            gcmf.goToPub(pub);
-        } else {
-            Log.d(LOG_TAG,"graf is null, so can't show pub on map!") ;
-            Toast.makeText(this, "Would show pub: " + pub.getName() + " on map, but something's gone wrong.", Toast.LENGTH_SHORT).show();
-        }
-    }//*/
-
-    /*@Override
-    public void setGolfCourseMapFragment(GolfCourseMapFragment gcMapFragment) {
-        gcmf = gcMapFragment ;
-    }//*/
 
     /**
      * @return An ArrayList of the available courses
@@ -191,20 +149,4 @@ public class HomeActivity extends AppCompatActivity
         //TODO: Implement this method
         Log.d(LOG_TAG, "Would switch to the CourseManager fragment now...") ;
     }
-
-    /**DELETE THIS METHOD & REMOVE LISTENER IMPLEMENTATION AS NOT USED
-     *
-     * @param view
-     */
-/*    @Override
-    public void onClick(View view) {
-        // Pub clicks
-        if (view instanceof PubTextView) {
-            Log.d(LOG_TAG, "PubTextView was just clicked") ;
-            goToPub(((PubTextView) view).getPub());
-        } else {
-            Log.d(LOG_TAG, "Unrecognised view was just clicked") ;
-        }
-    }//*/
-
 }
