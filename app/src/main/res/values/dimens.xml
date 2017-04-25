@@ -25,6 +25,12 @@
     <dimen name="sc_text_size">8sp</dimen>
     <dimen name="sc_text_padding">4dp</dimen>
 
+    <!-- Launch Page -->
+    <dimen name="dialog_default_padding">4dp</dimen>
+    <dimen name="dialog_row_height">16dp</dimen>
+    <dimen name="dialog_new_player_text_size">18sp</dimen>
+    <dimen name="dialog_button_diameter">36dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -37,7 +43,6 @@
     <dimen name="footer_button_icon_top_padding_not_focused">8dp</dimen>
     <dimen name="footer_button_side_padding">12dp</dimen>
     <dimen name="footer_button_text_bottom_padding">10dp</dimen>
-    <!-- Launch Page -->
 
 
 </resources>

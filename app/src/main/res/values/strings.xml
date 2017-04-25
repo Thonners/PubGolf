@@ -17,6 +17,11 @@
     <string name="dialog_new_round_create">CREATE</string>
     <string name="dialog_new_round_join">JOIN</string>
     <string name="dialog_select_course_title">Select the course</string>
+    <string name="dialog_add_players_title">Add players</string>
+    <string name="dialog_add_players_subtitle">You can add or remove players later.\nPlayers filling their score in on their device are added separately.</string>
+    <string name="dialog_add_players_hint">Player name…</string>
+    <string name="dialog_play">PLAY</string>
+    <string name="dialog_cancel">CANCEL</string>
     <!-- Nav Bar Entries -->
     <string name="navbar_scorecard">Scorecard</string>
     <string name="navbar_map">Course Map</string>

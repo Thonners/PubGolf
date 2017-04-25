@@ -1,7 +1,9 @@
 package com.thonners.pubgolf;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -10,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -133,7 +138,7 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 .setNeutralButton("GET MORE COURSES", this);
         // Create & show the dialog
         AlertDialog dialog = builder.create();
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_slide_in_fade_out;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_slide_in_slide_out;
         dialog.show() ;
     }
     /**
@@ -204,9 +209,14 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 mListener.joinGame();
                 break ;
             case BUTTON_POSITIVE:
-                // PlayGolfDialog - Create game selected
-                Log.d(LOG_TAG, "Create new game selected.") ;
-                showSelectCourseDialog() ;
+                // TODO: better implement the interface to the AddNewPlayers dialog
+                if (dialog instanceof AddPlayersDialog) {
+                    mListener.launchNewGame(((AddPlayersDialog) dialog).getCourse());
+                } else {
+                    // PlayGolfDialog - Create game selected
+                    Log.d(LOG_TAG, "Create new game selected.");
+                    showSelectCourseDialog();
+                }
                 break ;
             case BUTTON_NEUTRAL:
                 // Select course Dialog - get more courses selected
@@ -215,9 +225,110 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
             default :
                 // Assume that this must be from the select course dialog, and that a course has been selected
                 // Might be quite a risky way of doing things
-                // Load the course selected
-                mListener.launchNewGame(availableCourses.get(id));
+                DialogFragment addPlayersDialog = AddPlayersDialog.newInstance(availableCourses.get(id)) ;
+                ((AddPlayersDialog) addPlayersDialog).setOnClickListener(this);
+                addPlayersDialog.show(getFragmentManager(), "AddPlayersDialog");
         }
     }
 
+    /**
+     * AlertDialog to allow user to enter player names. Shows a single row to begin with, with a
+     * button to add more rows for more players if required.
+     */
+    public static class AddPlayersDialog extends DialogFragment implements View.OnClickListener{
+
+        private final static String LOG_TAG = "AddPlayersDialog" ;
+        private final static String COURSE = "com.thonners.pubgolf.course" ;
+
+        private LinearLayout mainLayout ;
+        private final ArrayList<EditText> playerNameETs = new ArrayList<>() ;
+        private DialogInterface.OnClickListener clickListener = null;
+        private Course course ;
+
+        public static AddPlayersDialog newInstance(Course course) {
+            AddPlayersDialog frag = new AddPlayersDialog() ;
+            Bundle args = new Bundle() ;
+            args.putParcelable(COURSE, course);
+            frag.setArguments(args);
+            return frag ;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Get the course
+            this.course = getArguments().getParcelable(COURSE);
+            try {
+                Log.d(LOG_TAG, "Creating AddPlayersDialog...") ;
+                // Get the listener
+               // clickListener = (DialogInterface.OnClickListener) getParentFragment() ;
+                // Create the parent view
+                Log.d(LOG_TAG, "Creating main layout...") ;
+                mainLayout = new LinearLayout(getContext());
+                mainLayout.setOrientation(LinearLayout.VERTICAL);
+                // Create the first row
+                Log.d(LOG_TAG, "Adding first row...") ;
+                addPlayerRow();
+
+                // Use builder for convenient construction
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                // Set the content
+                builder.setTitle(R.string.dialog_add_players_title)
+                        .setView(mainLayout)
+                        .setPositiveButton(R.string.dialog_play, clickListener)
+                        .setNegativeButton(R.string.dialog_cancel,clickListener) ;
+
+                // Set the entry / exit animation
+                AlertDialog dialog = builder.create() ;
+                dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_slide_in_fade_out;
+
+                return dialog ;
+
+            } catch (ClassCastException e) {
+                Log.d(LOG_TAG, "Error casting parent fragment to DialogInterface.OnClickListener when creating AddPlayersDialog: " + e.getMessage()) ;
+            }
+            return null ;
+        }
+
+        private void addPlayerRow() {
+            // Create the view
+            View newRow = getActivity().getLayoutInflater().inflate(R.layout.dialog_frag_add_players,null) ;
+            // Get the sub-view instances
+            TextView tvNumber = (TextView) newRow.findViewById(R.id.tv_number) ;
+            EditText etPlayerName = (EditText) newRow.findViewById(R.id.et_new_player) ;
+            ImageView iv = (ImageView) newRow.findViewById(R.id.add_player_button) ;
+            // Add the editText to the arrayList
+            playerNameETs.add(etPlayerName) ;
+            // Request focus for ET
+            etPlayerName.requestFocus();
+            // Set the numberTV to the size of the playerNameETs arrayList - this will give the player number, whilst its index is this number - 1
+            tvNumber.setText(playerNameETs.size() + ": ");
+            // Set the onClickListener for the button
+            iv.setOnClickListener(this);
+            // Add it to the main view
+            mainLayout.addView(newRow);
+        }
+
+        @Override
+        public void onClick(View view) {
+            // Add clicked, so add another row
+            addPlayerRow();
+            // Hide this button
+            view.animate()
+                    .alpha(0.0f)
+                    .setDuration(300)
+                    .start();
+        }
+
+        public ArrayList<EditText> getPlayerNames() {
+            return playerNameETs;
+        }
+
+        public Course getCourse() {
+            return course;
+        }
+
+        public void setOnClickListener(DialogInterface.OnClickListener clickListener) {
+            this.clickListener = clickListener;
+        }
+    }
 }

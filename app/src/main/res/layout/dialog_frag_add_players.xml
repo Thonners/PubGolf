@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dialog_default_padding">
+
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dialog_new_player_text_size"
+        android:textColor="@color/primary_text"/>
+
+    <EditText
+        android:id="@+id/et_new_player"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/dialog_new_player_text_size"
+        android:hint="@string/dialog_add_players_hint"
+        android:padding="@dimen/sc_text_padding"/>
+
+    <ImageView
+        android:id="@+id/add_player_button"
+        android:layout_width="@dimen/dialog_button_diameter"
+        android:layout_height="@dimen/dialog_button_diameter"
+        android:src="@drawable/ic_add_circle_outline_black_24dp"
+        android:tint="@color/primary_text"
+        android:padding="@dimen/sc_text_padding"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
