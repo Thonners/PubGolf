@@ -27,7 +27,7 @@
 
     <!-- Launch Page -->
     <dimen name="dialog_default_padding">4dp</dimen>
-    <dimen name="dialog_row_height">16dp</dimen>
+    <dimen name="dialog_entry_anim_y_offset">36dp</dimen>
     <dimen name="dialog_new_player_text_size">18sp</dimen>
     <dimen name="dialog_button_diameter">36dp</dimen>
 

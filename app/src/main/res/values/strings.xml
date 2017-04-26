@@ -20,6 +20,8 @@
     <string name="dialog_add_players_title">Add players</string>
     <string name="dialog_add_players_subtitle">You can add or remove players later.\nPlayers filling their score in on their device are added separately.</string>
     <string name="dialog_add_players_hint">Player name…</string>
+    <string name="dialog_add_players_empty_name_toast">Please enter a player name before adding another player</string>
+    <string name="dialog_add_players_empty_name_toast_play">Please enter at least one player\'s name before starting a game</string>
     <string name="dialog_play">PLAY</string>
     <string name="dialog_cancel">CANCEL</string>
     <!-- Nav Bar Entries -->
@@ -41,10 +43,6 @@
         <item name="sc_header_name">Establishment</item>
         <item name="sc_header_drink">Drink</item>
         <item name="sc_header_par">Par</item>
-        <item name="sc_header_p1">Player 1
-        </item> <!-- Remove this when adding players / names implemented -->
-        <item name="sc_header_p2">Player 2
-        </item> <!-- Remove this when adding players / names implemented -->
     </array>
     <string name="scorecard_total">Total:</string>
 

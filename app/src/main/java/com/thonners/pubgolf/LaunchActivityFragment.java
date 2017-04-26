@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,7 +51,6 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
         return fragment;
     }
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {/*
@@ -96,7 +97,6 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
      * activity.
      */
     public interface OnLaunchFragmentInteractionListener {
-        void launchNewGame(Course courseToLoad);
         void joinGame() ;
         ArrayList<Course> getCourses() ;
         void getMoreCourses() ;
@@ -209,14 +209,9 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 mListener.joinGame();
                 break ;
             case BUTTON_POSITIVE:
-                // TODO: better implement the interface to the AddNewPlayers dialog
-                if (dialog instanceof AddPlayersDialog) {
-                    mListener.launchNewGame(((AddPlayersDialog) dialog).getCourse());
-                } else {
-                    // PlayGolfDialog - Create game selected
-                    Log.d(LOG_TAG, "Create new game selected.");
-                    showSelectCourseDialog();
-                }
+                // PlayGolfDialog - Create game selected
+                Log.d(LOG_TAG, "Create new game selected.");
+                showSelectCourseDialog();
                 break ;
             case BUTTON_NEUTRAL:
                 // Select course Dialog - get more courses selected
@@ -226,7 +221,6 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 // Assume that this must be from the select course dialog, and that a course has been selected
                 // Might be quite a risky way of doing things
                 DialogFragment addPlayersDialog = AddPlayersDialog.newInstance(availableCourses.get(id)) ;
-                ((AddPlayersDialog) addPlayersDialog).setOnClickListener(this);
                 addPlayersDialog.show(getFragmentManager(), "AddPlayersDialog");
         }
     }
@@ -242,15 +236,59 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
 
         private LinearLayout mainLayout ;
         private final ArrayList<EditText> playerNameETs = new ArrayList<>() ;
-        private DialogInterface.OnClickListener clickListener = null;
+        private AddPlayersDialogListener mListener = null;
         private Course course ;
 
+        public interface AddPlayersDialogListener {
+            void launchNewGame(Course course, ArrayList<String> playerNames) ;
+        }
+
+        /**
+         * newInstance constructor
+         * @param course the golf course to be loaded
+         * @return the fragment
+         */
         public static AddPlayersDialog newInstance(Course course) {
             AddPlayersDialog frag = new AddPlayersDialog() ;
             Bundle args = new Bundle() ;
             args.putParcelable(COURSE, course);
             frag.setArguments(args);
             return frag ;
+        }
+
+        // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            // Verify that the host activity implements the callback interface
+            try {
+                // Instantiate the NoticeDialogListener so we can send events to the host
+                mListener = (AddPlayersDialogListener) context;
+            } catch (ClassCastException e) {
+                // The activity doesn't implement the interface, throw exception
+                throw new ClassCastException(context.toString()
+                        + " must implement NoticeDialogListener");
+            }
+        }
+
+        /**
+         * Set the positive button View.onClickListener() to be this
+         *
+         * onStart() is where dialog.show() is actually called on the underlying dialog, so we have
+         * to do it there or later in the lifecycle.
+         * Doing it in onResume() makes sure that even if there is a config change environment that
+         * skips onStart then the dialog will still be functioning properly after a rotation.
+         */
+        @Override
+        public void onResume()
+        {
+            super.onResume();
+            final AlertDialog d = (AlertDialog)getDialog();
+            if(d != null) {
+                Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
+                positiveButton.setId(BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(this);
+            }
         }
 
         @Override
@@ -274,8 +312,8 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 // Set the content
                 builder.setTitle(R.string.dialog_add_players_title)
                         .setView(mainLayout)
-                        .setPositiveButton(R.string.dialog_play, clickListener)
-                        .setNegativeButton(R.string.dialog_cancel,clickListener) ;
+                        .setPositiveButton(R.string.dialog_play, null)
+                        .setNegativeButton(R.string.dialog_cancel, null) ;
 
                 // Set the entry / exit animation
                 AlertDialog dialog = builder.create() ;
@@ -289,6 +327,10 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
             return null ;
         }
 
+        /**
+         * Add a row to the view, populate it with the correct number, set the onClickListener for
+         * the button, and retain the
+         */
         private void addPlayerRow() {
             // Create the view
             View newRow = getActivity().getLayoutInflater().inflate(R.layout.dialog_frag_add_players,null) ;
@@ -296,6 +338,8 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
             TextView tvNumber = (TextView) newRow.findViewById(R.id.tv_number) ;
             EditText etPlayerName = (EditText) newRow.findViewById(R.id.et_new_player) ;
             ImageView iv = (ImageView) newRow.findViewById(R.id.add_player_button) ;
+            // Set the ID of the iv so we can get the appropriate edittext later
+            iv.setId(playerNameETs.size());
             // Add the editText to the arrayList
             playerNameETs.add(etPlayerName) ;
             // Request focus for ET
@@ -305,30 +349,81 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
             // Set the onClickListener for the button
             iv.setOnClickListener(this);
             // Add it to the main view
+            newRow.setAlpha(0.0f);
+            newRow.setTranslationY(-1 * getResources().getDimension(R.dimen.dialog_entry_anim_y_offset));
             mainLayout.addView(newRow);
-        }
-
-        @Override
-        public void onClick(View view) {
-            // Add clicked, so add another row
-            addPlayerRow();
-            // Hide this button
-            view.animate()
-                    .alpha(0.0f)
+            // Animate its entry
+            newRow.animate()
+                    .setInterpolator(new DecelerateInterpolator())
+                    .alpha(1.0f)
+                    .translationY(0.0f)
                     .setDuration(300)
                     .start();
         }
 
-        public ArrayList<EditText> getPlayerNames() {
-            return playerNameETs;
+        /**
+         * The onClick called when a user clicks the 'add new row'. Adds a new row and animates
+         * the exit of the button just clicked.
+         * @param view The 'add player' button which has just been clicked.
+         */
+        @Override
+        public void onClick(View view) {
+            if (view instanceof ImageView) {
+                // Check editText isn't empty. If it is, show Toast and return (i.e. take no further action)
+                if (playerNameETs.get(view.getId()).getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), R.string.dialog_add_players_empty_name_toast, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Add clicked, so add another row
+                addPlayerRow();
+                // Hide this button
+                view.animate()
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .start();
+                view.setOnClickListener(null);
+            } else if (view instanceof Button){
+                // It's a button on the dialog - switch to find out which one
+                switch (view.getId()) {
+                    case BUTTON_POSITIVE:
+                        ArrayList<String> playerNames = getPlayerNames();
+                        if (!playerNames.isEmpty()) {
+                            // Hide this dialog
+                            if (getDialog() != null ) getDialog().dismiss();
+                            // If there's at least one name, start the game!
+                            mListener.launchNewGame(course, playerNames);
+                        } else {
+                            // Show a toast that we need a name!
+                            Toast.makeText(getContext(), R.string.dialog_add_players_empty_name_toast_play, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    default:
+                        Log.d(LOG_TAG, "Unrecognised id of view clicked... ID = " + view.getId()) ;
+                        break;
+                }
+
+            }
+        }
+
+        /**
+         * @return An ArrayList of the names entered in the EditTexts
+         */
+        public ArrayList<String> getPlayerNames() {
+            ArrayList<String> playerNames = new ArrayList<>(playerNameETs.size()) ;
+            for (EditText et : playerNameETs) {
+                String name = et.getText().toString() ;
+                if (!name.isEmpty()) {
+                    playerNames.add(name) ;
+                } else {
+                    Log.d(LOG_TAG,"Name extracted from EditText was empty, so won't be added to the final names list");
+                }
+            }
+            return playerNames;
         }
 
         public Course getCourse() {
             return course;
         }
 
-        public void setOnClickListener(DialogInterface.OnClickListener clickListener) {
-            this.clickListener = clickListener;
-        }
     }
 }

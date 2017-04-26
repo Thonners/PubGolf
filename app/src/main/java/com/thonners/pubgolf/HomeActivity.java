@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, /*ScorecardFragment.OnScorecardFragmentInteractionListener, *//*PubTextView.OnClickListener,*/ GolfCourseMapFragment.OnGCMapFragmentInteraction{
+        implements NavigationView.OnNavigationItemSelectedListener, LaunchActivityFragment.OnLaunchFragmentInteractionListener, /*ScorecardFragment.OnScorecardFragmentInteractionListener, *//*PubTextView.OnClickListener,*/ GolfCourseMapFragment.OnGCMapFragmentInteraction, LaunchActivityFragment.AddPlayersDialog.AddPlayersDialogListener {
 
     private final String LOG_TAG = "LaunchActivityFragment" ;
 
@@ -126,13 +126,13 @@ public class HomeActivity extends AppCompatActivity
      * Interface method to be called from the LaunchActivityFragment to create a new scorecard
      */
     @Override
-    public void launchNewGame(Course courseToLoad) {
+    public void launchNewGame(Course courseToLoad, ArrayList<String> playerNames) {
         getSupportActionBar().setTitle(courseToLoad.getName());
         Intent newRound = new Intent(this,GolfRoundActivity.class) ;
         newRound.putExtra(GolfRoundActivity.COURSE,courseToLoad) ;
+        newRound.putExtra(GolfRoundActivity.PLAYER_NAMES,playerNames) ;
         startActivity(newRound);
     }
-
     /**
      * @return An ArrayList of the available courses
      */

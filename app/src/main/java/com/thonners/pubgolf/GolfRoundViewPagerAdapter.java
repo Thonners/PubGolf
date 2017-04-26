@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
     private GolfCourseMapFragment mapFragment ;
 
     private HashMap<Integer, Fragment> pageReferenceMap = new HashMap<>() ;
+    private ArrayList<String> playerNames ;
 
     private Course course ;
 
@@ -33,9 +35,10 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
      *
      * @param fragmentManager
      */
-    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager, Course course) {
+    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager, Course course, ArrayList<String> playerNames) {
         super(fragmentManager);
         this.course = course ;
+        this.playerNames = playerNames ;
     }
 
     /**
@@ -57,7 +60,7 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment ;
         switch (position) {
             case SCORECARD_FRAGMENT:
-                fragment = ScorecardFragment.newInstance(course);
+                fragment = ScorecardFragment.newInstance(course, playerNames);
                 break;
             case MAP_FRAGMENT:
                 fragment = GolfCourseMapFragment.newInstance(course);

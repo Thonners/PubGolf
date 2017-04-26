@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class GolfRoundActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,  PubTextView.OnClickListener, Footer.FooterInteractionListener, ScorecardFragment.OnScorecardFragmentInteractionListener {
 
@@ -26,6 +28,7 @@ public class GolfRoundActivity extends AppCompatActivity
     private static final int MAP_FOOTER_BUTTON_ID = 1 ;
 
     public static final String COURSE = "com.thonners.pubgolf.COURSE" ;
+    public static final String PLAYER_NAMES = "com.thonners.pubgolf.PLAYERNAMES" ;
 
     private Course course ;
     private Footer footer ;
@@ -54,6 +57,8 @@ public class GolfRoundActivity extends AppCompatActivity
         Intent intent = getIntent() ;
         // Get the course
         course = intent.getParcelableExtra(COURSE) ;
+        // Get the player names
+        ArrayList<String> playerNames = intent.getStringArrayListExtra(PLAYER_NAMES) ;
 
         // Set the activity title
         getSupportActionBar().setTitle(course.getName());
@@ -64,7 +69,7 @@ public class GolfRoundActivity extends AppCompatActivity
         footer.setFooterInteractionListener(this);
 
         // Create the pager adapter and set the viewPager to use it
-        pagerAdapter = new GolfRoundViewPagerAdapter(getSupportFragmentManager(), course);
+        pagerAdapter = new GolfRoundViewPagerAdapter(getSupportFragmentManager(), course, playerNames);
         viewPager.setAdapter(pagerAdapter);
         // Prevent the viewPager destroying fragments/views when they're offscreen
         viewPager.setOffscreenPageLimit(pagerAdapter.getCount());

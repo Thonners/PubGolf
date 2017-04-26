@@ -48,6 +48,7 @@ public class ScorecardLayout extends LinearLayout {
 
     public interface OnScorecardLayoutInteractionListener {
         void populateScorecard() ;
+        ArrayList<String> getPlayerNames() ;
     }
     /**
      * Constructor for use programatically
@@ -64,28 +65,30 @@ public class ScorecardLayout extends LinearLayout {
     public ScorecardLayout(Context context) {
         this(context,null);
         this.context = context ;
-        initialise();
+    //    initialise();
     }
     public ScorecardLayout(Context context, AttributeSet attrs) {
         super(context,attrs);
         this.context = context ;
-        initialise();
+   //     initialise();
     }
     public ScorecardLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context ;
-        initialise();
+     //   initialise();
     }
 
     /**
      * Method to create the grid as required for the scorecard
      */
-    private void initialise() {
+    public void initialise() {
         Log.d(LOG_TAG, "ScorecardLayout.initialise() called...");
         // Force orientation to vertical
         this.setOrientation(VERTICAL);
         // Set the background so that there's an outline to the whole grid
         this.setBackground(getResources().getDrawable(R.drawable.cell_outlined));
+        // Get the player names so they're known before creating the header row
+  //      setPlayers(mListener.getPlayerNames());
         // Create the first row
         createHeaderRow();
 
@@ -190,6 +193,12 @@ public class ScorecardLayout extends LinearLayout {
         createRow(hole);
     }
 
+    public void setPlayers(ArrayList<String> playerNames) {
+        for (String name : playerNames) {
+            players.add(new Player(name)) ;
+        }
+    }
+
     /**
      * @return The number of holes (and therefore rows) to be shown in the layout
      */
@@ -266,6 +275,7 @@ public class ScorecardLayout extends LinearLayout {
             String[] headers = context.getResources().getStringArray(R.array.scorecard_headers) ;
             // Get the total number of columns - standard columns + no. of players
             noColumns = headers.length + players.size() ;
+            Log.d(LOG_TAG,"players.size() = " + players.size()) ;
             String text ;
             View view = null;
             // Loop through each column and create the appropriate view
@@ -277,6 +287,7 @@ public class ScorecardLayout extends LinearLayout {
                         if (col < headers.length) {
                             text = headers[col];
                         } else {
+                            Log.d(LOG_TAG,"players column") ;
                             text = players.get(col - headers.length).getName();
                         }
                         // Create TextView instance

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 
 /**
  * A Fragment to hold and display the scorecard.
@@ -20,8 +22,10 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
     private final String LOG_TAG = "ScorecardFragment" ;
 
     private final static String COURSE_PARCELABLE = "com.thonners.pubgolf.ScorecardFragment.COURSE" ;
+    private final static String PLAYER_NAMES_PARCELABLE = "com.thonners.pubgolf.ScorecardFragment.PLAYER_NAMES" ;
     private Course course ;
     private ScorecardLayout scorecardLayout ;
+    private ArrayList<String> playerNames ;
 
     private OnScorecardFragmentInteractionListener mListener;
 
@@ -35,11 +39,11 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
      *
      * @return A new instance of fragment ScorecardFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ScorecardFragment newInstance(Course course) {
+    public static ScorecardFragment newInstance(Course course, ArrayList<String> playerNames) {
         ScorecardFragment fragment = new ScorecardFragment();
         Bundle args = new Bundle();
         args.putParcelable(COURSE_PARCELABLE, course);
+        args.putStringArrayList(PLAYER_NAMES_PARCELABLE, playerNames);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +53,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.course = getArguments().getParcelable(COURSE_PARCELABLE) ;
+            this.playerNames = getArguments().getStringArrayList(PLAYER_NAMES_PARCELABLE) ;
         }
     }
 
@@ -59,6 +64,8 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         View view = inflater.inflate(R.layout.fragment_scorecard, container, false);
         scorecardLayout = (ScorecardLayout) view.findViewById(R.id.scorecard_layout);
         //course = mListener.getCourse() ;
+        scorecardLayout.setPlayers(playerNames);
+        scorecardLayout.initialise();
         scorecardLayout.setOnScorecardLayoutInteractionListener(this);
         return view ;
     }
@@ -109,6 +116,11 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
             scorecardLayout.addHole(hole);
         }
         scorecardLayout.showTotalRow();
+    }
+
+    @Override
+    public ArrayList<String> getPlayerNames() {
+        return playerNames ;
     }
 
 
