@@ -240,7 +240,7 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
         private Course course ;
 
         public interface AddPlayersDialogListener {
-            void launchNewGame(Course course, ArrayList<String> playerNames) ;
+            void launchNewGame(Course course) ;
         }
 
         /**
@@ -295,6 +295,8 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Get the course
             this.course = getArguments().getParcelable(COURSE);
+// Debugging
+Log.d(LOG_TAG, "When creating player name dialog, there are currently " + this.course.getPlayers().size() + " players in the course already.") ;
             try {
                 Log.d(LOG_TAG, "Creating AddPlayersDialog...") ;
                 // Get the listener
@@ -390,8 +392,10 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                         if (!playerNames.isEmpty()) {
                             // Hide this dialog
                             if (getDialog() != null ) getDialog().dismiss();
-                            // If there's at least one name, start the game!
-                            mListener.launchNewGame(course, playerNames);
+                            // If there's at least one name, add players to the course/game
+                            course.addPlayers(playerNames);
+                            // Start the game!
+                            mListener.launchNewGame(course);
                         } else {
                             // Show a toast that we need a name!
                             Toast.makeText(getContext(), R.string.dialog_add_players_empty_name_toast_play, Toast.LENGTH_SHORT).show();

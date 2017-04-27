@@ -41,7 +41,7 @@ public class ScorecardLayout extends LinearLayout {
     private int noHoles = 9;
     private Context context ;
     private final ArrayList<ScorecardRow> rows = new ArrayList<>() ;
-    private final ArrayList<Player> players = new ArrayList<>() ;
+    private ArrayList<Player> players ; //= new ArrayList<>() ;
     private final ArrayList<ScorecardTotalTextView> totals = new ArrayList<>() ;
 
     private OnScorecardLayoutInteractionListener mListener ;
@@ -193,10 +193,10 @@ public class ScorecardLayout extends LinearLayout {
         createRow(hole);
     }
 
-    public void setPlayers(ArrayList<String> playerNames) {
-        for (String name : playerNames) {
-            players.add(new Player(name)) ;
-        }
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players ;
+// Debugging
+Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + this.players.size() + " players in the course already.") ;
     }
 
     /**

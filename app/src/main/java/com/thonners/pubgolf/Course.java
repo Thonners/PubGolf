@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class to hold all the details required for a holes.
@@ -19,6 +20,8 @@ public class Course implements Parcelable {
     private int id ;
     private String name ;
     private ArrayList<Hole> holes = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
+//    private HashMap<Player, ArrayList<Integer>> scores = new HashMap<>() ;  // Key=Player, ArrayList<Integer> = scores for each hole. Hole1=Index0 - need to implement writing/recovering from
 
     /**
      * Constructor
@@ -37,6 +40,7 @@ public class Course implements Parcelable {
         this.id = in.readInt() ;
         this.name = in.readString() ;
         in.readTypedList(this.holes, Hole.CREATOR) ;
+        in.readTypedList(this.players, Player.CREATOR);
     }
 
     /**
@@ -78,6 +82,18 @@ public class Course implements Parcelable {
         return id;
     }
 
+    public void addPlayers(ArrayList<String> playerNames) {
+        for (String name : playerNames) {
+            players.add(new Player(name)) ;
+            //scores.put(new Player(name), new ArrayList<Integer>()) ;
+        }
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+        //return new ArrayList<>(scores.keySet()) ;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -88,16 +104,17 @@ public class Course implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeTypedList(holes);
+        dest.writeTypedList(players);
+
     }
 
-
     /**
-     * Parcelable CREATOR for the Course class.
+     * Parcelable CREATOR for the Player class.
      */
     public static final Course.Creator<Course> CREATOR = new Parcelable.Creator<Course>() {
         /**
          * Calls the private constructor to make a Course instance from a Parcel
-         * @param in The Parel instance
+         * @param in The Parcel instance
          * @return The newly created Course instance
          */
         @Override

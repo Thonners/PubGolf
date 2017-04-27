@@ -39,11 +39,10 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
      *
      * @return A new instance of fragment ScorecardFragment.
      */
-    public static ScorecardFragment newInstance(Course course, ArrayList<String> playerNames) {
+    public static ScorecardFragment newInstance(Course course) {
         ScorecardFragment fragment = new ScorecardFragment();
         Bundle args = new Bundle();
         args.putParcelable(COURSE_PARCELABLE, course);
-        args.putStringArrayList(PLAYER_NAMES_PARCELABLE, playerNames);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +52,8 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.course = getArguments().getParcelable(COURSE_PARCELABLE) ;
-            this.playerNames = getArguments().getStringArrayList(PLAYER_NAMES_PARCELABLE) ;
+// Debugging
+Log.d(LOG_TAG, "When creating ScorecardFrag, there are now " + this.course.getPlayers().size() + " players in the course already.") ;
         }
     }
 
@@ -63,8 +63,7 @@ public class ScorecardFragment extends Fragment implements ScorecardLayout.OnSco
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scorecard, container, false);
         scorecardLayout = (ScorecardLayout) view.findViewById(R.id.scorecard_layout);
-        //course = mListener.getCourse() ;
-        scorecardLayout.setPlayers(playerNames);
+        scorecardLayout.setPlayers(course.getPlayers());
         scorecardLayout.initialise();
         scorecardLayout.setOnScorecardLayoutInteractionListener(this);
         return view ;

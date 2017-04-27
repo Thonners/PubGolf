@@ -3,11 +3,10 @@ package com.thonners.pubgolf;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * FragmentPagerAdapter to provide the fragments for the ViewPager in the {@link GolfRoundActivity}
@@ -26,7 +25,6 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
     private GolfCourseMapFragment mapFragment ;
 
     private HashMap<Integer, Fragment> pageReferenceMap = new HashMap<>() ;
-    private ArrayList<String> playerNames ;
 
     private Course course ;
 
@@ -35,10 +33,11 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
      *
      * @param fragmentManager
      */
-    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager, Course course, ArrayList<String> playerNames) {
+    public GolfRoundViewPagerAdapter(FragmentManager fragmentManager, Course course) {
         super(fragmentManager);
         this.course = course ;
-        this.playerNames = playerNames ;
+// Debugging
+Log.d("GRViewPager", "When creating GolfRoundViewPagerAdapter, there are now " + this.course.getPlayers().size() + " players in the course already.") ;
     }
 
     /**
@@ -60,7 +59,7 @@ public class GolfRoundViewPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment ;
         switch (position) {
             case SCORECARD_FRAGMENT:
-                fragment = ScorecardFragment.newInstance(course, playerNames);
+                fragment = ScorecardFragment.newInstance(course);
                 break;
             case MAP_FRAGMENT:
                 fragment = GolfCourseMapFragment.newInstance(course);

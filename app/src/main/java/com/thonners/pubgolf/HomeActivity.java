@@ -126,11 +126,10 @@ public class HomeActivity extends AppCompatActivity
      * Interface method to be called from the LaunchActivityFragment to create a new scorecard
      */
     @Override
-    public void launchNewGame(Course courseToLoad, ArrayList<String> playerNames) {
+    public void launchNewGame(Course courseToLoad) {
         getSupportActionBar().setTitle(courseToLoad.getName());
         Intent newRound = new Intent(this,GolfRoundActivity.class) ;
         newRound.putExtra(GolfRoundActivity.COURSE,courseToLoad) ;
-        newRound.putExtra(GolfRoundActivity.PLAYER_NAMES,playerNames) ;
         startActivity(newRound);
     }
     /**

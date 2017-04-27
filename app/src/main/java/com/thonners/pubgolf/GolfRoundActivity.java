@@ -28,7 +28,6 @@ public class GolfRoundActivity extends AppCompatActivity
     private static final int MAP_FOOTER_BUTTON_ID = 1 ;
 
     public static final String COURSE = "com.thonners.pubgolf.COURSE" ;
-    public static final String PLAYER_NAMES = "com.thonners.pubgolf.PLAYERNAMES" ;
 
     private Course course ;
     private Footer footer ;
@@ -57,8 +56,8 @@ public class GolfRoundActivity extends AppCompatActivity
         Intent intent = getIntent() ;
         // Get the course
         course = intent.getParcelableExtra(COURSE) ;
-        // Get the player names
-        ArrayList<String> playerNames = intent.getStringArrayListExtra(PLAYER_NAMES) ;
+// Debugging
+Log.d(LOG_TAG, "When creating golfRoundActivity fragment, there are now " + this.course.getPlayers().size() + " players in the course already.") ;
 
         // Set the activity title
         getSupportActionBar().setTitle(course.getName());
@@ -69,7 +68,7 @@ public class GolfRoundActivity extends AppCompatActivity
         footer.setFooterInteractionListener(this);
 
         // Create the pager adapter and set the viewPager to use it
-        pagerAdapter = new GolfRoundViewPagerAdapter(getSupportFragmentManager(), course, playerNames);
+        pagerAdapter = new GolfRoundViewPagerAdapter(getSupportFragmentManager(), course);
         viewPager.setAdapter(pagerAdapter);
         // Prevent the viewPager destroying fragments/views when they're offscreen
         viewPager.setOffscreenPageLimit(pagerAdapter.getCount());
