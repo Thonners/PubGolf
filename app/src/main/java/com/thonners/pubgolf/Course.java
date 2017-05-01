@@ -2,7 +2,9 @@ package com.thonners.pubgolf;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,13 +17,13 @@ import java.util.HashMap;
 
 public class Course implements Parcelable {
 
-    private final int defaultCourseLength = 9 ;
+    private final String LOG_TAG = "Course" ;
 
     private int id ;
     private String name ;
     private ArrayList<Hole> holes = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
-//    private HashMap<Player, ArrayList<Integer>> scores = new HashMap<>() ;  // Key=Player, ArrayList<Integer> = scores for each hole. Hole1=Index0 - need to implement writing/recovering from
+    private HashMap<Player, Integer[]> scores = new HashMap<>() ;  // Key=Player, ArrayList<Integer> = scores for each hole. Hole1=Index0 - need to implement writing/recovering from
 
     /**
      * Constructor
@@ -69,6 +71,13 @@ public class Course implements Parcelable {
     }
 
     /**
+     * @return The number of holes in this course
+     */
+    public int getNoHoles() {
+        return holes.size();
+    }
+
+    /**
      * @return The name of the holes
      */
     public String getName() {
@@ -82,19 +91,56 @@ public class Course implements Parcelable {
         return id;
     }
 
-    public void addPlayers(ArrayList<String> playerNames) {
+    /**
+     * Add local players to the course
+     * @param playerNames The list of player names to be used
+     */
+    public void addLocalPlayers(ArrayList<String> playerNames) {
         for (String name : playerNames) {
-            players.add(new Player(name)) ;
-            //scores.put(new Player(name), new ArrayList<Integer>()) ;
+            Player newPlayer = new Player(name) ;
+            addPlayer(newPlayer);
+        }
+    }
+
+    /**
+     * Add remote players to the course
+     * @param playerNames The list of player names to be used
+     */
+    public void addRemotePlayers(ArrayList<String> playerNames) {
+        for (String name : playerNames) {
+            Player newPlayer = new Player(name, Player.Type.REMOTE) ;
+            addPlayer(newPlayer);
+        }
+    }
+
+    /**
+     * Method to add players to the course. This method should be called to ensure players added to
+     * both the ArrayList and the scores HashMap.
+     * @param player
+     */
+    private void addPlayer(Player player) {
+        players.add(player) ;
+        scores.put(player, new Integer[getNoHoles()]) ;
+    }
+
+    public void setPlayerScore(Player player, Hole hole, int score) {
+        if (scores.containsKey(player)) {
+            scores.get(player)[hole.getHoleNo() - 1] = score ;
+        } else {
+            Log.e(LOG_TAG,"Trying to set score for player: " + player.getName() + ", but they're not in the scores HashMap KeySet.") ;
         }
     }
 
     /**
      * METHOD ONLY FOR TESTING REMOTE PLAYERS IN THE LAYOUT. REMOVE THIS ONCE REMOTE PLAYERS IMPLEMENTED PROPERLY.
+     *
+     * Create two dummy remote players
      */
     public void addDEBUGRemotePlayers(){
-        players.add(new Player("Dave", Player.Type.REMOTE)) ;
-        players.add(new Player("Barry", Player.Type.REMOTE)) ;
+        ArrayList<String> newRemotePlayers = new ArrayList<>(2) ;
+        newRemotePlayers.add("Dave") ;
+        newRemotePlayers.add("Barry") ;
+        addRemotePlayers(newRemotePlayers);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -117,7 +163,7 @@ public class Course implements Parcelable {
     }
 
     /**
-     * Parcelable CREATOR for the Player class.
+     * Parcelable CREATOR for the Course class.
      */
     public static final Course.Creator<Course> CREATOR = new Parcelable.Creator<Course>() {
         /**

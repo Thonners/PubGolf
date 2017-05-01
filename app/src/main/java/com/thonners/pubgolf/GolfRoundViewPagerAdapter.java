@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.HashMap;
 
@@ -72,7 +73,7 @@ Log.d("GRViewPager", "When creating GolfRoundViewPagerAdapter, there are now " +
     }
 
     @Override
-    public void destroyItem(View container, int position, Object object) {
+    public void destroyItem(ViewGroup container, int position, Object object) {
         super.destroyItem(container, position, object);
         pageReferenceMap.remove(position) ;
     }

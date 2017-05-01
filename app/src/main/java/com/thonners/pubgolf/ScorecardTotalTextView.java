@@ -4,13 +4,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
-import android.text.Editable;
 import android.util.AttributeSet;
 import android.support.v7.widget.AppCompatTextView ;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,11 +22,11 @@ import java.util.HashSet;
  * @since 20/04/17
  */
 
-public class ScorecardTotalTextView extends AppCompatTextView { //implements TextWatcher {
+public class ScorecardTotalTextView extends AppCompatTextView {
 
     private static final String LOG_TAG = "ScorecardTotalTextView" ;
 
-    private TotalTextWatcher textWatcher = new TotalTextWatcher(this) ;
+    private ScorecardLayout.scoreTextWatcher textWatcher = new ScorecardLayout.scoreTextWatcher(this) ;
 
     private int total = 0;
     private int columnNo ;
@@ -69,21 +66,13 @@ public class ScorecardTotalTextView extends AppCompatTextView { //implements Tex
     }
 
     /**
-     * @param editText The EditText to add to the collection which this ScorecardTotalTextView watches
+     * @param view The TextView (or EditText) of the player's score
      */
-    public void addEditText(EditText editText) {
-        // Add it to the collection
-        scoreEditTexts.add(editText) ; // If it's already there, this won't do anything
-        // Apply the textWatcher (this)
-        editText.addTextChangedListener(textWatcher);
-    }
-
     public void addScoreView(TextView view) {
         // Add it to the collection
         scoreViews.add(view) ; // If it's already there, this won't do anything
-        // Apply the textWatcher (this)
+        // Apply the textWatcher
         view.addTextChangedListener(textWatcher);
-
     }
 
     /**
@@ -120,49 +109,4 @@ public class ScorecardTotalTextView extends AppCompatTextView { //implements Tex
     }
 
 
-    /**
-     * Class extending TextWatcher to allow for one instance per player column, to be called when
-     * any of the player's edit texts are changed
-     */
-    public static class TotalTextWatcher implements TextWatcher {
-        private ScorecardTotalTextView totalTextView ;
-
-        public TotalTextWatcher(ScorecardTotalTextView totalTextView) {
-            this.totalTextView = totalTextView ;
-        }
-
-        /**
-         * TextWatcher override method
-         * @param s
-         * @param start
-         * @param count
-         * @param after
-         */
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        /**
-         * TextWatcher override method
-         * @param s
-         */
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-
-        /**
-         * TextWatcher override method - called when an EditText changes its text, so call
-         * {@link #recalculateTotal()} to update the TotalTextView's value
-         * @param s
-         * @param start
-         * @param before
-         * @param count
-         */
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            totalTextView.recalculateTotal();
-        }
-    }
 }

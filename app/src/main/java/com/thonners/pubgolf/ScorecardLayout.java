@@ -213,6 +213,52 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
     }
 
     /**
+     * Class extending TextWatcher to allow for one instance per player column, to be called when
+     * any of the player's edit texts are changed
+     */
+    public static class scoreTextWatcher implements TextWatcher {
+        private ScorecardTotalTextView totalTextView ;
+
+        public scoreTextWatcher(ScorecardTotalTextView totalTextView) {
+            this.totalTextView = totalTextView ;
+        }
+
+        /**
+         * TextWatcher override method
+         * @param s
+         * @param start
+         * @param count
+         * @param after
+         */
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        /**
+         * TextWatcher override method
+         * @param s
+         */
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+
+        /**
+         * TextWatcher override method - called when an EditText changes its text, so call
+         * {@link ScorecardTotalTextView#recalculateTotal()} to update the TotalTextView's value
+         * @param s
+         * @param start
+         * @param before
+         * @param count
+         */
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            totalTextView.recalculateTotal();
+        }
+    }
+
+    /**
      * Basic class to hold the views in a row of the scorecard
      */
     private class ScorecardRow extends LinearLayout {
@@ -346,7 +392,6 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
                                 }
                                 // Add the TextWatcher
                                 totals.get(playerIndex).addScoreView((TextView) view);
-                                totals.get(playerIndex).on
                                 break;
                         }
                         break;
