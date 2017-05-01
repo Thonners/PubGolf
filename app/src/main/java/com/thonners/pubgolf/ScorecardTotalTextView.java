@@ -10,7 +10,9 @@ import android.support.v7.widget.AppCompatTextView ;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.HashSet;
 
@@ -32,6 +34,7 @@ public class ScorecardTotalTextView extends AppCompatTextView { //implements Tex
     private int total = 0;
     private int columnNo ;
     private final HashSet<EditText> scoreEditTexts = new HashSet<>() ;
+    private final HashSet<TextView> scoreViews = new HashSet<>() ;
 
     public ScorecardTotalTextView(Context context) {
         super(context);
@@ -73,6 +76,14 @@ public class ScorecardTotalTextView extends AppCompatTextView { //implements Tex
         scoreEditTexts.add(editText) ; // If it's already there, this won't do anything
         // Apply the textWatcher (this)
         editText.addTextChangedListener(textWatcher);
+    }
+
+    public void addScoreView(TextView view) {
+        // Add it to the collection
+        scoreViews.add(view) ; // If it's already there, this won't do anything
+        // Apply the textWatcher (this)
+        view.addTextChangedListener(textWatcher);
+
     }
 
     /**

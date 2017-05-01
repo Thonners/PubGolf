@@ -394,6 +394,8 @@ Log.d(LOG_TAG, "When creating player name dialog, there are currently " + this.c
                             if (getDialog() != null ) getDialog().dismiss();
                             // If there's at least one name, add players to the course/game
                             course.addPlayers(playerNames);
+                            // TODO: Remove this once remote players implemented properly
+                            course.addDEBUGRemotePlayers();
                             // Start the game!
                             mListener.launchNewGame(course);
                         } else {

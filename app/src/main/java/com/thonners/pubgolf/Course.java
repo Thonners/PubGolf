@@ -89,6 +89,14 @@ public class Course implements Parcelable {
         }
     }
 
+    /**
+     * METHOD ONLY FOR TESTING REMOTE PLAYERS IN THE LAYOUT. REMOVE THIS ONCE REMOTE PLAYERS IMPLEMENTED PROPERLY.
+     */
+    public void addDEBUGRemotePlayers(){
+        players.add(new Player("Dave", Player.Type.REMOTE)) ;
+        players.add(new Player("Barry", Player.Type.REMOTE)) ;
+    }
+
     public ArrayList<Player> getPlayers() {
         return players;
         //return new ArrayList<>(scores.keySet()) ;

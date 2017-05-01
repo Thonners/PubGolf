@@ -87,8 +87,6 @@ public class ScorecardLayout extends LinearLayout {
         this.setOrientation(VERTICAL);
         // Set the background so that there's an outline to the whole grid
         this.setBackground(getResources().getDrawable(R.drawable.cell_outlined));
-        // Get the player names so they're known before creating the header row
-  //      setPlayers(mListener.getPlayerNames());
         // Create the first row
         createHeaderRow();
 
@@ -280,6 +278,7 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
             View view = null;
             // Loop through each column and create the appropriate view
             for (int col = 0 ; col < noColumns ; col++) {
+                int playerIndex = col - headers.length;
                 switch (rowNo) {
                     case HEADER:
                         // Header row
@@ -292,8 +291,7 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
                         }
                         // Create TextView instance
                         view = createTextView(text, col);
-                        // Set the layout parameters
-                       // view.setLayoutParams(getLayoutParamsPG(HEADER, col));
+
                         break;
                     case TOTAL:
                         // Total row
@@ -311,8 +309,7 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
                             // Add to the collection
                             totals.add((ScorecardTotalTextView) view) ;
                         }
-                        // Set the layout parameters
-                        //view.setLayoutParams(getLayoutParamsPG(TOTAL, col));
+
                         break;
                     default:
                         // Standard row
@@ -342,12 +339,16 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
                                 break;
                             default:
                                 // Player's score entry EditTexts
-                                view = createEditText(col);
+                                if (players.get(playerIndex).getType() == Player.Type.LOCAL) {
+                                    view = createEditText(col);
+                                } else {
+                                    view = createTextView("0",col) ;
+                                }
                                 // Add the TextWatcher
-                                totals.get(col - 4).addEditText((EditText) view); // Hardcoded to '4' not the end of the world, but needs to be modified if columns added/removed
+                                totals.get(playerIndex).addScoreView((TextView) view);
+                                totals.get(playerIndex).on
                                 break;
                         }
-                        //view.setLayoutParams(getLayoutParamsPG(rowNo, col));
                         break;
 
                 }
@@ -355,6 +356,12 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
                     view.setLayoutParams(getLayoutParamsPG(rowNo, col));
                     // Add to the view
                     this.addView(view);
+                    // Set its background colour if a remote player
+                    if (playerIndex >= 0) {
+                        if (players.get(playerIndex).getType() == Player.Type.REMOTE) {
+                            view.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.cell_outlined_remote_tint));
+                        }
+                    }
                 }
             }
         }
@@ -378,11 +385,6 @@ Log.d(LOG_TAG, "When setPlayers is called in ScorecardLayout, there are now " + 
             tv.setId(column);
             // Set the style
             TextViewCompat.setTextAppearance(tv,R.style.tv_scorecard_header);
-            /*if (Build.VERSION.SDK_INT < 23) {
-                tv.setTextAppearance(context, R.style.tv_scorecard_header);
-            } else {
-                tv.setTextAppearance(R.style.tv_scorecard_header);
-            }*/
             // Set the text
             tv.setText(text);
             // Set the text appearance
