@@ -3,6 +3,7 @@ package com.thonners.pubgolf;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -101,6 +102,16 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
         ArrayList<Course> getCourses() ;
         void getMoreCourses() ;
     }
+
+    /**
+     * Launches the RuleManager activity.
+     * TODO: Change this to launch RuleManager - just launches RuleEditor for now
+     */
+    private void startRuleManager() {
+        Intent ruleManagerIntent = new Intent(getContext(), RulesEditorActivity.class) ;
+        startActivity(ruleManagerIntent);
+    }
+
     /**
      * Method to show a dialog box to determine the type of game to begin.
      */
@@ -177,6 +188,10 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
         view.setOnClickListener(this);
     }
 
+    /**
+     * OnClickListener for the main Launch Cards on the home page
+     * @param view The card clicked
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -191,6 +206,7 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
                 Log.d(LOG_TAG,"Download Courses Clicked.");
                 break ;
             case R.id.card_custom_rules:
+                startRuleManager() ;
                 Log.d(LOG_TAG,"Custom Rules Clicked.");
                 break ;
         }

@@ -1,6 +1,15 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">Pub Golf</string>
+    <string name="course_manager_title">Course Manager</string>
+    <string name="course_editor_title">Course Editor</string>
+    <string name="rules_manager_title">Rules Manager</string>
+    <string name="rules_editor_title">Rules Editor</string>
+
+    <!-- Menu Strings -->
     <string name="action_settings">Settings</string>
+    <string name="action_save">SAVE</string>
+    <string name="action_instructions">Instructions</string>
 
     <!-- Launcher Page Card Texts -->
     <string name="card_play_golf_title">Play Pub Golf\!</string>
@@ -24,6 +33,13 @@
     <string name="dialog_add_players_empty_name_toast_play">Please enter at least one player\'s name before starting a game</string>
     <string name="dialog_play">PLAY</string>
     <string name="dialog_cancel">CANCEL</string>
+    <string name="dialog_save_rules_title">Exit without saving\?</string>
+    <string name="dialog_save_rules_message">Are you sure you want to go back without saving the rules\?</string>
+    <string name="dialog_save">SAVE</string>
+    <string name="dialog_dont_save">DON\'T SAVE</string>
+    <string name="dialog_keep_editing">KEEP EDITING</string>
+    <string name="dialog_rule_editor_instructions_title">Instructions</string>
+    <string name="dialog_rule_editor_instructions_message">To edit a rule, click on the text, and edit it as you desire.\n\nTo renumber a rule, long click its number and select a new one.\n\nLong click the title to edit the name of the rules.\n\nClick save to keep the changes.</string>
     <!-- Nav Bar Entries -->
     <string name="navbar_scorecard">Scorecard</string>
     <string name="navbar_map">Course Map</string>
