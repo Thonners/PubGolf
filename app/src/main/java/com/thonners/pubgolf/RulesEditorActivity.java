@@ -14,6 +14,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class RulesEditorActivity extends AppCompatActivity implements DialogInterface.OnClickListener{
 
+    private RulesManager rm ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,8 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         getSupportActionBar().setTitle(R.string.rules_editor_title);
 
+        // Rules manager
+        rm = new RulesManager(this) ;
     }
 
     /**
@@ -81,7 +85,7 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
      */
     private void saveRules() {
         // Save the rules
-
+        rm.saveRules(getRulesTitle(), getRuleSet());
         // Go back
         this.onBackPressed();
     }
@@ -117,5 +121,21 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
                 dialog.dismiss();
                 break;
         }
+    }
+
+    /**
+     * @return The title of the rules
+     */
+    public String getRulesTitle() {
+        String title = "" ;
+        return title ;
+    }
+
+    /**
+     * @return A String array of the rules, one entry per rule, indexed by rule number - 1
+     */
+    public String[] getRuleSet() {
+        String[] ruleSet = new String[1];
+        return ruleSet ;
     }
 }

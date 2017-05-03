@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.TextViewCompat;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class RulesEntry extends LinearLayout {
 
     private TextView tvNumber ;
     private TextView tvRules  ;
+    private boolean isEditable ;
 
     /**
      * Constructor
@@ -30,13 +32,19 @@ public class RulesEntry extends LinearLayout {
      * @param ruleNo The rule number to be shown in the first TextView
      * @param rule The details of the rule to be shown in the second TextView
      */
+    public RulesEntry(Context context, int ruleNo, String rule, boolean isEditable) {
+        super(context);
+        initialise(context, null, 0);
+        setRuleNo(ruleNo);
+        setRuleText(rule) ;
+        setEditable(isEditable) ;
+    }
     public RulesEntry(Context context, int ruleNo, String rule) {
         super(context);
         initialise(context, null, 0);
         setRuleNo(ruleNo);
         setRuleText(rule) ;
     }
-
     /**
      * Default Constructors
      * @param context Activity context
@@ -72,7 +80,11 @@ public class RulesEntry extends LinearLayout {
         this.setLayoutParams(lp);
         // Create the textView instances
         tvNumber = new TextView(context) ;
-        tvRules = new TextView(context) ;
+        if (isEditable) {
+            tvRules = new EditText(context) ;
+        } else {
+            tvRules = new TextView(context);
+        }
         // Set the text appearance
         TextViewCompat.setTextAppearance(tvNumber,R.style.rules_body);
         TextViewCompat.setTextAppearance(tvRules,R.style.rules_body);
@@ -104,5 +116,19 @@ public class RulesEntry extends LinearLayout {
      */
     public void setRuleText(String ruleText) {
         tvRules.setText(ruleText);
+    }
+
+    /**
+     * @return Whether the rules entry is to be editable
+     */
+    public boolean isEditable() {
+        return isEditable;
+    }
+
+    /**
+     * @param editable Whether the rules entry is to be editable
+     */
+    public void setEditable(boolean editable) {
+        isEditable = editable;
     }
 }
