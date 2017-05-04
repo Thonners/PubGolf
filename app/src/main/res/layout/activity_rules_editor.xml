@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.thonners.pubgolf.RulesEditorActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/rules_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/sc_outer_padding"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/rules_title"
+                style="@style/rules_title"
+                android:text="@string/rules_title"/>
+            <TextView
+                android:id="@+id/rules_aim_title"
+                style="@style/rules_subtitle"
+                android:text="@string/rules_aim_subtitle"/>
+            <TextView
+                android:id="@+id/rules_aim_body"
+                style="@style/rules_body"
+                android:text="@string/rules_aim_body"
+                android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/rules_subtitle"
+                style="@style/rules_subtitle"
+                android:text="@string/rules_subtitle"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

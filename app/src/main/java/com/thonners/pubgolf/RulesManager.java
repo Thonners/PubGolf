@@ -1,6 +1,7 @@
 package com.thonners.pubgolf;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,11 +22,16 @@ import java.util.HashMap;
 
 public class RulesManager {
 
-    private static String rulesDirName = "rules" ;
-    private static String standardRulesTitle = "PGA Rules" ;
+    private final String LOG_TAG = "RulesManager" ;
+
+    public final static String STANDARD_RULES = "PGA Rules" ;
+
+    private final static String rulesDirName = "rules" ;
+    private final static String defaultRulesSharedPrefKey = "com.thonners.pubgolf.DEFAULT_RULES" ;
 
     private final HashMap<String, String[]> ruleSets = new HashMap<>(3, 0.9f) ;
     private File rulesDir ;
+    private SharedPreferences defaultRulesSharedPrefs ;
 
     public RulesManager(Context context) {
         initialise(context);
@@ -38,9 +45,21 @@ public class RulesManager {
     private void initialise(Context context) {
         // Get the standard rules
         String[] standardRulesArray = context.getResources().getStringArray(R.array.rules_entries) ;
-        ruleSets.put(standardRulesTitle,standardRulesArray) ;
+        ruleSets.put(STANDARD_RULES,standardRulesArray) ;
         // Get an instance of the rules directory so we can read/write from/to it
         rulesDir = new File(context.getFilesDir(),rulesDirName) ;
+        // create it if it doesn't exist
+        if (!rulesDir.isDirectory()) {
+            if (rulesDir.mkdirs()) {
+                Log.d(LOG_TAG,"Rules directory created") ;
+            } else {
+                Log.d(LOG_TAG,"Rules directory not created") ;
+            }
+        } else {
+                Log.d(LOG_TAG,"Rules directory is a directory") ;
+            }
+        // Get an instance of the SharedPrefs so we can get / save the default rule title
+        defaultRulesSharedPrefs = context.getSharedPreferences(defaultRulesSharedPrefKey,Context.MODE_PRIVATE) ;
     }
 
     /**
@@ -52,9 +71,9 @@ public class RulesManager {
     private void getLocalRules() {
         File[] ruleFiles = rulesDir.listFiles() ;
         // Check if there are any custom rules, if not, return
-        //if (ruleFiles.length == 0) return;
+        if (ruleFiles == null) return;
         for (int i = 0 ; i < ruleFiles.length ; i++) {
-            loadRules(ruleFiles[i]) ;
+            loadRules(ruleFiles[i]);
         }
     }
 
@@ -94,18 +113,44 @@ public class RulesManager {
         // Check if the file already exists
         if (rulesFile.exists()) {
             // TODO: Check overwrite?
+        } else {
+            try {
+                rulesFile.createNewFile();
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "Error creating rules file: " + saveFileName) ;
+                e.printStackTrace();
+            }
         }
         // Write the file
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(rulesFile))) {
-            Log.d("RulesManager", "Saving \"" + title + "\" to: " + rulesFile.getName()) ;
+            Log.d(LOG_TAG, "Saving \"" + title + "\" to: " + rulesFile.getName()) ;
             for (int i = 0 ; i < ruleSet.length; i++) {
                 bw.write(ruleSet[i]);
                 bw.newLine();
             }
         } catch (Exception e) {
-            Log.e("RulesManager", "Error reading rules file: " + rulesFile.getName()) ;
+            Log.e(LOG_TAG, "Error reading rules file: " + rulesFile.getName()) ;
+            e.printStackTrace();
         }
         // re-load the rules
         getLocalRules();
+    }
+
+    public String[] getRuleSet(String ruleSetTitle) {
+        if (ruleSets.containsKey(ruleSetTitle)) {
+            return ruleSets.get(ruleSetTitle) ;
+        } else {
+            Log.d(LOG_TAG, "Unable to find rules titled: " + ruleSetTitle  + " so returning standard rule set.") ;
+            return ruleSets.get(STANDARD_RULES) ;
+        }
+    }
+
+    public String[] getDefaultRuleSet() {
+        String defaultRulesTitle = defaultRulesSharedPrefs.getString(defaultRulesSharedPrefKey, STANDARD_RULES) ;
+        return getRuleSet(defaultRulesTitle) ;
+    }
+
+    public void deleteLocalRuleSet(String ruleSetTitle) {
+
     }
 }

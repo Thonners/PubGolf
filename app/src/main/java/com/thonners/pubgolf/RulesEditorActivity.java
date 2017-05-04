@@ -7,14 +7,20 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_NEUTRAL;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class RulesEditorActivity extends AppCompatActivity implements DialogInterface.OnClickListener{
+public class RulesEditorActivity extends AppCompatActivity implements DialogInterface.OnClickListener, View.OnLongClickListener{
 
     private RulesManager rm ;
+    private EditText titleTV ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,18 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
 
         // Rules manager
         rm = new RulesManager(this) ;
+        // Get the view instance
+        LinearLayout layout = (LinearLayout) findViewById(R.id.rules_linear_layout) ;
+        // Initialise the rule counter
+        int ruleNo = 1 ;
+        // Load the rules
+        for (String rule : rm.getDefaultRuleSet()) {
+            RulesEntry entry = new RulesEntry(this,ruleNo,rule,true) ;
+            layout.addView(entry);
+            ruleNo++ ;
+        }
+        // Get the title
+        titleTV = (EditText) findViewById(R.id.rules_title) ;
     }
 
     /**
@@ -127,7 +145,7 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
      * @return The title of the rules
      */
     public String getRulesTitle() {
-        String title = "" ;
+        String title = titleTV.getText().toString() ;
         return title ;
     }
 
@@ -136,6 +154,18 @@ public class RulesEditorActivity extends AppCompatActivity implements DialogInte
      */
     public String[] getRuleSet() {
         String[] ruleSet = new String[1];
+        ruleSet[0] = "TestEntry" ;
         return ruleSet ;
     }
+
+    /**
+     * Listener for clicks on the title / numbers
+     * @param view the view instance that was clicked
+     */
+    @Override
+    public boolean onLongClick(View view) {
+        // TODO: Add logic for dealing with long-clicks on rule numbers
+        return true ;
+    }
+
 }

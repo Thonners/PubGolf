@@ -34,14 +34,14 @@ public class RulesEntry extends LinearLayout {
      */
     public RulesEntry(Context context, int ruleNo, String rule, boolean isEditable) {
         super(context);
-        initialise(context, null, 0);
+        setEditable(isEditable) ;
+        initialise(context, null, 0, ruleNo);
         setRuleNo(ruleNo);
         setRuleText(rule) ;
-        setEditable(isEditable) ;
     }
     public RulesEntry(Context context, int ruleNo, String rule) {
         super(context);
-        initialise(context, null, 0);
+        initialise(context, null, 0, ruleNo);
         setRuleNo(ruleNo);
         setRuleText(rule) ;
     }
@@ -51,17 +51,17 @@ public class RulesEntry extends LinearLayout {
      */
     public RulesEntry(Context context) {
         super(context);
-        initialise(context, null, 0);
+        initialise(context, null, 0, 0);
     }
 
     public RulesEntry(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initialise(context, attrs, 0);
+        initialise(context, attrs, 0, 0);
     }
 
     public RulesEntry(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialise(context, attrs, defStyleAttr);
+        initialise(context, attrs, defStyleAttr, 0);
     }
 
     /**
@@ -72,7 +72,7 @@ public class RulesEntry extends LinearLayout {
      * @param attrs Attribute set for views
      * @param defStyleAttr Style for views
      */
-    private void initialise(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    private void initialise(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int ruleNo) {
         // Force orientation horizontal
         this.setOrientation(HORIZONTAL);
         // Set to match parent width, and wrap height
@@ -91,6 +91,8 @@ public class RulesEntry extends LinearLayout {
         // Create the layout params
         LayoutParams lpNo = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT) ;
         LayoutParams lpRules = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f) ;
+        // Set the view ID
+        tvNumber.setId(ruleNo) ;
         // Add them to the view
         this.addView(tvNumber, lpNo);
         this.addView(tvRules, lpRules);

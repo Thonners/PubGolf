@@ -27,22 +27,13 @@ public class RulesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.rules_activity_title));
 
-        // Get the intent and the custom rule-set if it exists
-        Intent intent = getIntent() ;
-        String[] rulesArray ;
-        if (intent != null && intent.getExtras() != null && intent.getExtras().containsKey(RULES_EXTRA)) {
-            rulesArray = intent.getStringArrayExtra(RULES_EXTRA);
-        } else {
-            // Otherwise use the default rules
-            rulesArray = getResources().getStringArray(R.array.rules_entries) ;
-        }
-
         // Populate the rules...
+        RulesManager rm = new RulesManager(this) ;
         // Get the view instance
         LinearLayout layout = (LinearLayout) findViewById(R.id.rules_linear_layout) ;
         // Initialise the rule counter
         int ruleNo = 1 ;
-        for (String rule : rulesArray) {
+        for (String rule : rm.getDefaultRuleSet()) {
           //  rules += rule + "\n" ;  // Add a new line to the end of the string
             RulesEntry entry = new RulesEntry(this,ruleNo,rule) ;
             layout.addView(entry);
