@@ -133,4 +133,11 @@ public class RulesEntry extends LinearLayout {
     public void setEditable(boolean editable) {
         isEditable = editable;
     }
+
+    /**
+     * @return The text defining the rule
+     */
+    public String getRuleText() {
+        return tvRules.getText().toString() ;
+    }
 }

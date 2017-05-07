@@ -10,8 +10,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Class to manage getting / saving cutsom rule sets
@@ -32,6 +35,7 @@ public class RulesManager {
     private final HashMap<String, String[]> ruleSets = new HashMap<>(3, 0.9f) ;
     private File rulesDir ;
     private SharedPreferences defaultRulesSharedPrefs ;
+    private boolean hasCustomSets = false ;
 
     public RulesManager(Context context) {
         initialise(context);
@@ -47,7 +51,7 @@ public class RulesManager {
         String[] standardRulesArray = context.getResources().getStringArray(R.array.rules_entries) ;
         ruleSets.put(STANDARD_RULES,standardRulesArray) ;
         // Get an instance of the rules directory so we can read/write from/to it
-        rulesDir = new File(context.getFilesDir(),rulesDirName) ;
+        rulesDir = new File(context.getExternalFilesDir(null),rulesDirName) ;
         // create it if it doesn't exist
         if (!rulesDir.isDirectory()) {
             if (rulesDir.mkdirs()) {
@@ -63,6 +67,13 @@ public class RulesManager {
     }
 
     /**
+     * @return Whether there are any custom rule sets available
+     */
+    public boolean hasCustomSets() {
+        return hasCustomSets;
+    }
+
+    /**
      * Reads the rules directory for any files. If found, loads the rules according to their title.
      *
      * Titles are saved as the file name, with spaces replaced by underscores. The String[] is split
@@ -74,6 +85,9 @@ public class RulesManager {
         if (ruleFiles == null) return;
         for (int i = 0 ; i < ruleFiles.length ; i++) {
             loadRules(ruleFiles[i]);
+        }
+        if (ruleFiles.length > 0) {
+            hasCustomSets = true;
         }
     }
 
@@ -107,9 +121,24 @@ public class RulesManager {
         ruleSets.put(ruleSetTitle,ruleSet) ;
     }
 
-    public void saveRules(String title, String[] ruleSet) {
+    /**
+     * Creates a File instance for the rule set of the given title, replacing spaces with underscores.
+     * @param title The title of the rule set
+     * @return The File instance
+     */
+    private File getRuleFile(String title) {
         String saveFileName = title.replaceAll(" ", "_") ;
         File rulesFile = new File(rulesDir, saveFileName) ;
+        return rulesFile ;
+    }
+
+    /**
+     * Saves the rule set to a file
+     * @param title
+     * @param ruleSet
+     */
+    public void saveRules(String title, String[] ruleSet) {
+        File rulesFile = getRuleFile(title) ;
         // Check if the file already exists
         if (rulesFile.exists()) {
             // TODO: Check overwrite?
@@ -117,7 +146,7 @@ public class RulesManager {
             try {
                 rulesFile.createNewFile();
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error creating rules file: " + saveFileName) ;
+                Log.e(LOG_TAG, "Error creating rules file for: " + title) ;
                 e.printStackTrace();
             }
         }
@@ -150,7 +179,42 @@ public class RulesManager {
         return getRuleSet(defaultRulesTitle) ;
     }
 
+    /**
+     * @param ruleSetTitle The title of the rule file to be deleted.
+     */
     public void deleteLocalRuleSet(String ruleSetTitle) {
+        File ruleFileToBeDeleted = getRuleFile(ruleSetTitle) ;
+        if (ruleFileToBeDeleted.canRead()) {
+            ruleFileToBeDeleted.delete() ;
+        }
+    }
 
+    /**
+     * @return An array list of the available rule sets' titles
+     */
+    public Set<String> getAvailableRuleSets() {
+        return ruleSets.keySet() ;
+    }
+
+    /**
+     * @param ruleSetTitle The title of the rule set in question
+     * @return The formatted date that the file was created
+     */
+    public String getRulesCreationDate(String ruleSetTitle) {
+        File rulesFile = getRuleFile(ruleSetTitle) ;
+        if (rulesFile.exists()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy") ;
+            Date date = new Date(rulesFile.lastModified()) ;
+            return sdf.format(date) ;
+        } else {
+            return "" ;
+        }
+    }
+
+    /**
+     * @param ruleSetTitle The title of the rules set to be the default rules
+     */
+    public void setDefaultRules(String ruleSetTitle) {
+        defaultRulesSharedPrefs.edit().putString(defaultRulesSharedPrefKey,ruleSetTitle) ;
     }
 }

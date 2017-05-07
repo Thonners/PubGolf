@@ -105,10 +105,9 @@ public class LaunchActivityFragment extends Fragment implements View.OnClickList
 
     /**
      * Launches the RuleManager activity.
-     * TODO: Change this to launch RuleManager - just launches RuleEditor for now
      */
     private void startRuleManager() {
-        Intent ruleManagerIntent = new Intent(getContext(), RulesEditorActivity.class) ;
+        Intent ruleManagerIntent = new Intent(getContext(), RulesManagerActivity.class) ;
         startActivity(ruleManagerIntent);
     }
 

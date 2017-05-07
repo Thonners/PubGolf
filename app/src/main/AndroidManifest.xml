@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -48,7 +50,8 @@
                 android:value="com.thonners.pubgolf.HomeActivity" />
         </activity>
         <activity android:name=".RulesActivity" />
-        <activity android:name=".RulesEditorActivity"></activity>
+        <activity android:name=".RulesEditorActivity" />
+        <activity android:name=".RulesManagerActivity"></activity>
     </application>
 
 </manifest>
